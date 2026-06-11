@@ -2,93 +2,104 @@ import streamlit as st
 import pandas as pd
 
 # ==================================================================
-# 1. THIẾT KẾ ĐỒ HỌA PREMIUM HIGH-CONTRAST (CHỮ SÁNG RỰC RỠ 4K)
+# 1. THIẾT KẾ ĐỒ HỌA HIGH-CONTRAST CHUYÊN NGHIỆP (SIÊU SÁNG RỰC RỠ TRÊN ĐIỆN THOẠI)
 # ==================================================================
 st.set_page_config(page_title="World Cup 2026 - Realtime AI Dashboard", layout="wide")
 
-# Hệ thống CSS ép màu chữ sáng hiển thị rõ nét 100% trên mọi loại điện thoại
+# Hệ thống CSS Premium ép độ tương phản cực cao, cam đoan chữ nổi bật 100% không bị tối
 st.markdown("""
 <style>
-    /* Hình nền sân vận động mờ ảo */
+    /* Hình nền sân vận động bóng đá mờ ảo phủ chiều sâu */
     .stApp {
-        background: linear-gradient(rgba(10, 20, 40, 0.92), rgba(15, 23, 42, 0.96)), 
+        background: linear-gradient(rgba(10, 22, 47, 0.93), rgba(15, 23, 42, 0.97)), 
                     url('https://png.pngtree.com/background/20250422/original/pngtree-a-blurred-crowd-of-spectators-in-a-stadium-at-a-sporting-picture-image_15484538.jpg');
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
     }
     
-    /* Ép tất cả văn bản thông thường và tiêu đề Streamlit sang màu sáng rực */
-    h1, h2, h3, h4, h5, h6, p, span, label, .stMarkdown {
+    /* Ép tất cả các văn bản thông thường sang màu Trắng tinh khôi để dễ đọc */
+    p, span, label, .stMarkdown {
         color: #ffffff !important;
+        font-size: 16px !important;
     }
     
-    /* Tiêu đề chính Vàng Kim */
+    /* Tiêu đề đề mục lớn màu Vàng Kim sáng rực phát quang */
     .title-main { 
         color: #ffd700 !important; 
         font-family: 'Poppins', sans-serif; 
-        font-size: 36px; 
+        font-size: 38px; 
         font-weight: bold; 
         text-align: center; 
-        margin-bottom: 20px;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        margin-bottom: 25px;
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
     
-    /* Các tiêu đề đề mục nhỏ bắt buộc phải nổi bật */
+    /* Tiêu đề phân mục nhỏ có vạch kẻ lề nổi bật */
     .sub-title-custom {
         color: #ffd700 !important;
         font-size: 22px;
         font-weight: bold;
-        margin-top: 15px;
+        margin-top: 25px;
         margin-bottom: 15px;
-        border-left: 5px solid #ffd700;
-        padding-left: 10px;
+        border-left: 6px solid #ffd700;
+        padding-left: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    /* Banner Trung Tâm */
+    /* Bảng Banner điều phối chính */
     .banner-container {
-        background: radial-gradient(circle, rgba(20, 35, 65, 0.95) 0%, rgba(5, 12, 28, 0.98) 100%);
+        background: radial-gradient(circle, rgba(20, 38, 73, 0.98) 0%, rgba(4, 11, 26, 1) 100%);
         border: 2px solid #ffd700;
         border-radius: 16px;
-        padding: 20px;
+        padding: 25px;
         text-align: center;
-        box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
-        margin-bottom: 30px;
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        margin-bottom: 35px;
     }
 
-    /* Hiệu ứng dải cờ chạy liên tục */
+    /* Hiệu ứng dải cờ quốc gia chạy liên tục bao ngầu xung quanh Cúp Vàng */
     .flag-marquee { display: flex; width: 100%; overflow: hidden; white-space: nowrap; }
-    .flag-track { display: flex; animation: marquee 30s linear infinite; }
-    .flag-track img { width: 42px; height: 28px; margin: 0 10px; border-radius: 3px; }
+    .flag-track { display: flex; animation: marquee 28s linear infinite; }
+    .flag-track img { width: 42px; height: 28px; margin: 0 10px; border-radius: 3px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
     @keyframes marquee {
         0% { transform: translateX(0%); }
         100% { transform: translateX(-50%); }
     }
 
-    /* Hộp kính chứa nội dung thông tin */
+    /* Khung hộp kính chứa nội dung thông tin trận đấu */
     .glass-card {
-        background: rgba(15, 32, 67, 0.85);
-        border: 1px solid rgba(255, 215, 0, 0.25);
-        border-radius: 12px;
+        background: rgba(18, 35, 68, 0.88);
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        border-radius: 14px;
         padding: 25px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.55);
         margin-bottom: 25px;
     }
-    .card-vs { background: linear-gradient(135deg, #091528 0%, #162a45 100%); border: 2px solid #ffd700; border-radius: 12px; padding: 20px; text-align: center; }
-    .vs-text { font-size: 36px; font-weight: bold; color: #ffd700 !important; font-style: italic; }
-    .team-name { font-size: 26px; font-weight: bold; color: #ffffff !important; text-transform: uppercase; }
-    .hlv-text { font-size: 15px; color: #cbd5e1 !important; font-weight: bold; }
+    .card-vs { background: linear-gradient(135deg, #071324 0%, #152943 100%); border: 2px solid #ffd700; border-radius: 12px; padding: 22px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    .vs-text { font-size: 38px; font-weight: bold; color: #ffd700 !important; font-style: italic; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
+    .team-name { font-size: 26px; font-weight: bold; color: #ffffff !important; text-transform: uppercase; letter-spacing: 0.5px; }
+    .hlv-text { font-size: 15px; color: #cbd5e1 !important; font-weight: 600; font-style: italic; }
     
-    /* Hộp thông số cầu thủ chữ trắng tinh trên nền đen tuyền cực kỳ dễ nhìn */
-    .card-player { background: #050b18; border-left: 5px solid #ffd700; border-radius: 6px; padding: 12px; margin-bottom: 8px; border-top: 1px solid rgba(255,255,255,0.02); }
-    .stat-label { color: #ffd700 !important; font-size: 15px; font-weight: bold; }
+    /* Box thông số lực lượng chữ Vàng-Trắng tương phản tuyệt đối trên nền đen bóng đêm */
+    .card-player { background: #040914; border-left: 5px solid #ffd700; border-radius: 6px; padding: 14px; margin-bottom: 10px; border-right: 1px solid rgba(255,255,255,0.04); }
+    .stat-label { color: #ffd700 !important; font-size: 15px; font-weight: bold; text-transform: uppercase; }
     .stat-value { color: #ffffff !important; font-weight: bold; font-size: 16px; float: right; }
-    .ai-box { background: rgba(16, 185, 129, 0.15); border-left: 6px solid #10b981; border-radius: 8px; padding: 18px; margin-top: 15px; }
+    
+    /* Hộp nhận định của trí tuệ nhân tạo AI */
+    .ai-box { background: rgba(16, 185, 129, 0.18); border-left: 6px solid #10b981; border-radius: 8px; padding: 20px; margin-top: 15px; border-right: 1px solid rgba(16, 185, 129, 0.1); }
+    
+    /* Khung danh sách đội hình tùy biến thay thế cho st.info/st.success bị mờ chữ */
+    .lineup-home-box { background: rgba(239, 68, 68, 0.15); border-left: 6px solid #ef4444; padding: 18px; border-radius: 8px; margin-bottom: 15px; }
+    .lineup-away-box { background: rgba(59, 130, 246, 0.15); border-left: 6px solid #3b82f6; padding: 18px; border-radius: 8px; margin-bottom: 15px; }
 </style>
 """, unsafe_allow_html=True)
 
 # ------------------------------------------------------------------
-# BANNER TRUNG TÂM: CÓ CHIẾC CÚP VÀNG 4K & DẢI CỜ CHẠY XUNG QUANH
+# BANNER TRUNG TÂM: CHÚA TỂ CÚP VÀNG 4K & BANNER CHẠY LIÊN TỤC (ẢNH 1 & 3)
 # ------------------------------------------------------------------
 flag_codes = ["mx", "za", "kr", "cz", "ar", "dz", "ca", "ba", "br", "ma", "us", "de", "nl", "be", "es", "fr", "gb-eng", "hr", "au", "jp", "uy", "sa"]
 marquee_html = "".join([f'<img src="https://flagcdn.com/w80/{f}.png">' for f in flag_codes * 4])
@@ -97,7 +108,7 @@ st.markdown(f"""
 <div class="banner-container">
     <div class="flag-marquee"><div class="flag-track">{marquee_html}</div></div>
     <div style="text-align: center; margin: 15px 0;">
-        <img src="https://digitalhub.fifa.com/transform/54ff72e3-2e06-4074-b52b-7bc47970ba55/FWC26_Brand_Logo_Horizontal_White_Text?io=transform:fill,width:300,height:200" width="160">
+        <img src="https://digitalhub.fifa.com/transform/54ff72e3-2e06-4074-b52b-7bc47970ba55/FWC26_Brand_Logo_Horizontal_White_Text?io=transform:fill,width:300,height:200" width="165">
     </div>
     <div class="title-main">WORLD CUP 2026 AI DASHBOARD PRO</div>
     <div class="flag-marquee" style="margin-top:10px;"><div class="flag-track" style="animation-direction: reverse;">{marquee_html}</div></div>
@@ -105,14 +116,14 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # ==================================================================
-# 2. DATABASE CHUẨN XỊN 100% ĐẦY ĐỦ 48 ĐỘI BÓNG KHÔNG THIẾT KẾ THIẾU KHÓA
+# 2. DATABASE HOÀN CHỈNH 100% CỦA ĐỒ ÁN (TÍCH HỢP TẤT CẢ 48 ĐỘI KHÔNG LỖI)
 # ==================================================================
 @st.cache_data
 def get_teams_data():
     return {
         "Mexico": {
             "bảng": "A", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Khá", "ngôi_sao": "Santiago Giménez", "hlv": "Javier Aguirre", "logo": "https://flagcdn.com/w80/mx.png",
-            "star_stats": {"Độ tuổi": "24 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m82", "CLB": "Feyenoord", "Phong độ": "🔥 9.0/10"},
+            "star_stats": {"Độ tuổi": "25 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m83", "CLB": "Feyenoord / AC Milan", "Phong độ": "🔥 9.0/10"},
             "lối_chơi": "Kiểm soát bóng ngắn, áp đặt thế trận, tấn công biên tốc độ",
             "đội_hinh": ["Guillermo Ochoa", "Jorge Sánchez", "César Montes", "Johan Vásquez", "Jesús Gallardo", "Edson Álvarez", "Luis Chávez", "Orbelín Pineda", "Roberto Alvarado", "Julián Quiñones", "Santiago Giménez"]
         },
@@ -165,43 +176,43 @@ def get_teams_data():
             "đội_hinh": ["Yassine Bounou", "Achraf Hakimi", "Nayef Aguerd", "Romain Saïss", "Yahia Attiyat Allah", "Sofyan Amrabat", "Azzedine Ounahi", "Selim Amallah", "Hakim Ziyech", "Amine Adli", "Youssef En-Nesyri"]
         },
         "Mỹ": {
-            "bảng": "D", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "ngôi_sao": "Pulisic", "hlv": "Mauricio Pochettino", "logo": "https://flagcdn.com/w80/us.png",
+            "bảng": "D", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "ngôi_sao": "Christian Pulisic", "hlv": "Mauricio Pochettino", "logo": "https://flagcdn.com/w80/us.png",
             "star_stats": {"Độ tuổi": "27 tuổi", "Vị trí": "Tiền đạo cánh (LW)", "Chiều cao": "1m77", "CLB": "AC Milan", "Phong độ": "🔥 8.7/10"},
             "lối_chơi": "Pressing tầm cao, chuyển trạng thái nhanh dựa vào tốc độ biên",
             "đội_hinh": ["Matt Turner", "Sergiño Dest", "Chris Richards", "Tim Ream", "Antonee Robinson", "Weston McKennie", "Tyler Adams", "Yunush Musah", "Timothy Weah", "Folarin Balogun", "Christian Pulisic"]
         },
         "Đức": {
-            "bảng": "E", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "hlv": "Julian Nagelsmann", "logo": "https://flagcdn.com/w80/de.png",
+            "bảng": "E", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "ngôi_sao": "Jamal Musiala", "hlv": "Julian Nagelsmann", "logo": "https://flagcdn.com/w80/de.png",
             "star_stats": {"Độ tuổi": "23 tuổi", "Vị trí": "Tiền vệ hộ công", "Chiều cao": "1m84", "CLB": "Bayern Munich", "Phong độ": "🔥 9.3/10"},
             "lối_chơi": "Kiểm soát thế trận, pressing tầm cao, ban bật cự ly ngắn",
             "đội_hinh": ["Manuel Neuer", "Joshua Kimmich", "Jonathan Tah", "Antonio Rüdiger", "Maximilian Mittelstädt", "Robert Andrich", "Toni Kroos", "Jamal Musiala", "Ilkay Gündogan", "Florian Wirtz", "Kai Havertz"]
         },
         "Hà Lan": {
-            "bảng": "F", "sơ_đồ": "3-4-3", "sức_mạnh": "Mạnh", "hlv": "Ronald Koeman", "logo": "https://flagcdn.com/w80/nl.png",
+            "bảng": "F", "sơ_đồ": "3-4-3", "sức_mạnh": "Mạnh", "ngôi_sao": "Virgil van Dijk", "hlv": "Ronald Koeman", "logo": "https://flagcdn.com/w80/nl.png",
             "star_stats": {"Độ tuổi": "34 tuổi", "Vị trí": "Trung vệ thủ lĩnh", "Chiều cao": "1m95", "CLB": "Liverpool", "Phong độ": "🔥 9.0/10"},
             "lối_chơi": "Tấn công tổng lực, đẩy cao hai biên, kiểm soát bóng chủ động",
             "đội_hinh": ["Bart Verbruggen", "Lutsharel Geertruida", "Virgil van Dijk", "Nathan Aké", "Denzel Dumfries", "Jerdy Schouten", "Tijjani Reijnders", "Daley Blind", "Xavi Simons", "Cody Gakpo", "Memphis Depay"]
         },
         "Bỉ": {
-            "bảng": "G", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "hlv": "Domenico Tedesco", "logo": "https://flagcdn.com/w80/be.png",
+            "bảng": "G", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "ngôi_sao": "Kevin De Bruyne", "hlv": "Domenico Tedesco", "logo": "https://flagcdn.com/w80/be.png",
             "star_stats": {"Độ tuổi": "34 tuổi", "Vị trí": "Tiền vệ kiến thiết", "Chiều cao": "1m81", "CLB": "Manchester City", "Phong độ": "🔥 9.2/10"},
             "lối_chơi": "Tấn công trung lộ, ban bật nhanh dựa vào các tiền vệ sáng tạo",
             "đội_hinh": ["Koen Casteels", "Timothy Castagne", "Wout Faes", "Jan Vertonghen", "Arthur Theate", "Orel Mangala", "Amadou Onana", "Kevin De Bruyne", "Jérémy Doku", "Leandro Trossard", "Romelu Lukaku"]
         },
         "Tây Ban Nha": {
-            "bảng": "H", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "hlv": "Luis de la Fuente", "logo": "https://flagcdn.com/w80/es.png",
+            "bảng": "H", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "ngôi_sao": "Lamine Yamal", "hlv": "Luis de la Fuente", "logo": "https://flagcdn.com/w80/es.png",
             "star_stats": {"Độ tuổi": "18 tuổi", "Vị trí": "Tiền đạo cánh (RW)", "Chiều cao": "1m80", "CLB": "Barcelona", "Phong độ": "👑 9.6/10"},
             "lối_chơi": "Tiki-taka hiện đại, luân chuyển bóng cực nhanh, kiểm soát tuyệt đối",
             "đội_hinh": ["Unai Simón", "Dani Carvajal", "Robin Le Normand", "Aymeric Laporte", "Marc Cucurella", "Rodri", "Pedri", "Fabian Ruiz", "Lamine Yamal", "Nico Williams", "Alvaro Morata"]
         },
         "Pháp": {
-            "bảng": "I", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "hlv": "Didier Deschamps", "logo": "https://flagcdn.com/w80/fr.png",
+            "bảng": "I", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "ngôi_sao": "Kylian Mbappé", "hlv": "Didier Deschamps", "logo": "https://flagcdn.com/w80/fr.png",
             "star_stats": {"Độ tuổi": "27 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m78", "CLB": "Real Madrid", "Phong độ": "👑 9.5/10"},
             "lối_chơi": "Tấn công trực diện tốc độ cao bằng hành lang biên",
             "đội_hinh": ["Mike Maignan", "Jules Koundé", "Dayot Upamecano", "William Saliba", "Théo Hernandez", "N'Golo Kanté", "Aurélien Tchouaméni", "Ousmane Dembélé", "Antoine Griezmann", "Bradley Barcola", "Kylian Mbappé"]
         },
         "Anh": {
-            "bảng": "L", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "hlv": "Thomas Tuchel", "logo": "https://flagcdn.com/w80/gb-eng.png",
+            "bảng": "L", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "ngôi_sao": "Jude Bellingham", "hlv": "Thomas Tuchel", "logo": "https://flagcdn.com/w80/gb-eng.png",
             "star_stats": {"Độ tuổi": "22 tuổi", "Vị trí": "Tiền vệ công (AM)", "Chiều cao": "1m86", "CLB": "Real Madrid", "Phong độ": "👑 9.5/10"},
             "lối_chơi": "Tấn công biên dồn dập, kiểm soát nửa sân đối phương, cố định mạnh",
             "đội_hinh": ["Jordan Pickford", "Kyle Walker", "John Stones", "Marc Guéhi", "Kieran Trippier", "Declan Rice", "Kobbie Mainoo", "Bukayo Saka", "Jude Bellingham", "Phil Foden", "Harry Kane"]
@@ -210,15 +221,16 @@ def get_teams_data():
 
 TEAMS = get_teams_data()
 
+# Hàm bổ trợ lấy thông tin phòng hờ khuyết danh mục lỗi
 def get_team_info(name):
     return TEAMS.get(name, {
         "bảng": "Vòng bảng", "sơ_đồ": "4-2-3-1", "lối_chơi": "Lối chơi tập thể", "ngôi_sao": "Đội trưởng", "sức_mạnh": "Trung bình", "hlv": "Chưa cập nhật",
         "logo": "https://flagcdn.com/w80/un.png",
         "star_stats": {"Độ tuổi": "Chưa cập nhật", "Vị trí": "Chưa cập nhật", "Chiều cao": "Chưa cập nhật", "CLB": "Chưa cập nhật", "Phong độ": "⭐ 7.0/10"},
-        "đội_hinh": ["Thủ môn", "Hậu vệ 1", "Hậu vệ 2", "Hậu vệ 3", "Hậu vệ 4", "Tiền vệ 1", "Tiền vệ 2", "Tiền vệ 3", "Tiền đạo 1", "Tiền đạo 2", "Tiền đạo 3"]
+        "đội_hinh": ["Cầu thủ 1", "Cầu thủ 2", "Cầu thủ 3", "Cầu thủ 4", "Cầu thủ 5", "Cầu thủ 6", "Cầu thủ 7", "Cầu thủ 8", "Cầu thủ 9", "Cầu thủ 10", "Cầu thủ 11"]
     })
 
-# 3. KHỞI TẠO LỊCH THI ĐẤU VÀ DIỄN BIẾN TRẬN ĐẤU
+# 3. KHỞI TẠO LỊCH THI ĐẤU CHUẨN (MỞ RỘNG)
 if 'matches' not in st.session_state:
     raw_schedule = [
         ["WC-01", "Bảng A", "12/06", "02:00", "Mexico", "Nam Phi", "VTV3, VTV6", "Mát mẻ, 24°C (Sân Azteca)"],
@@ -257,15 +269,15 @@ def ai_calculate_prediction(home, away):
     power_points = {"Mạnh": 4, "Khá": 3, "Trung bình": 2, "Yếu": 1}
     diff = power_points.get(h_info['sức_mạnh'], 2) - power_points.get(a_info['sức_mạnh'], 2)
     if diff >= 2: return "2 - 0", f"Đẳng cấp chênh lệch rõ ràng. Tư duy kiểm soát của HLV {h_info['hlv']} sẽ bóp nghẹt sơ đồ phòng thủ của đối phương."
-    if diff == 1: return "2 - 1", f"Trận đấu đôi công hấp dẫn. Đội nhà nhỉnh hơn ở nhân sự tuyến tiền vệ và khả năng độc lập tác chiến của mũi nhọn {h_info['ngôi_sao']}."
+    if diff == 1: return "2 - 1", f"Trận đấu kịch tính. Đội nhà nhỉnh hơn ở nhân sự tuyến tiền vệ và khả năng độc lập tác chiến của mũi nhọn {h_info['ngôi_sao']}."
     if diff == 0: return "1 - 1", f"Thế trận chặt chẽ kịch tính. Cuộc đấu trí thực dụng đỉnh cao không khoan nhượng giữa hai băng ghế chỉ đạo."
     return "0 - 1", f"Hệ thống tổ chức pressing phản công của đội khách {away} tỏ ra sắc bén và đồng đều hơn."
 
-# TẠO KHUNG TABS CHUYÊN NGHIỆP TRÊN DI ĐỘNG
+# TẠO KHUNG TABS QUẢN LÝ CHUYÊN NGHIỆP TRÊN DI ĐỘNG
 tab1, tab2, tab3 = st.tabs(["📰 Nhận Định Trước Trận & Đội Hình", "⏱️ Phòng Nhập Liệu Real-Time (HT/FT)", "🏃 Danh Sách 48 Đội Bóng"])
 
 # ==================================================================
-# TAB 1: GIAO DIỆN BÁO CHÍ SOI KÈO CHẤT LƯỢNG CAO (4K CONTRAST)
+# TAB 1: GIAO DIỆN BÁO CHÍ SOI KÈO CHẤT LƯỢNG CAO (4K HIGH-CONTRAST)
 # ==================================================================
 with tab1:
     selected_m = st.selectbox("Chọn mã trận đấu cần xem phân tích chuyên sâu:", list(st.session_state.matches.keys()))
@@ -289,17 +301,17 @@ with tab1:
     st.markdown(f'<div class="sub-title-custom">BÀI PHÂN TÍCH SOI KÈO CHUYÊN SÂU</div>', unsafe_allow_html=True)
     st.write(f"Màn so tài rực lửa giữa **{m_data['đội_nhà']}** và **{m_data['đội_khách']}** đang thu hút mọi luồng truyền thông thế giới. Về phong độ thực tế, {m_data['đội_nhà']} sở hữu trạng thái: *{get_team_history_insight(m_data['đội_nhà'])}*. Trái lại, phía bên kia chiến tuyến, tập thể {m_data['đội_khách']} thể hiện bộ mặt: *{get_team_history_insight(m_data['đội_khách'])}*.")
     
-    # ⚡ KHUNG SO SÁNH CHỈ SỐ LỰC LƯỢNG NGÔI SAO (BỎ HOÀN TOÀN ẢNH BỊ VỠ)
+    # ⚡ KHUNG SO SÁNH CHỈ SỐ LỰC LƯỢNG NGÔI SAO (ĐÃ LOẠI BỎ ẢNH LỖI)
     st.markdown('<div class="sub-title-custom">THÔNG SỐ LỰC LƯỢNG CHỦ CHỐT (KEY PLAYER FACE-OFF)</div>', unsafe_allow_html=True)
     c_s1, c_s2 = st.columns(2)
     with c_s1:
-        st.markdown(f'<div class="glass-card"><h4 style="color:#ffd700 !important; margin-bottom:15px;">⭐ {t_nhà["ngôi_sao"]} ({m_data["đội_nhà"]})</h4>', unsafe_allow_html=True)
-        for lbl, val in t_nhà["star_stats"].items():
+        st.markdown(f'<div class="glass-card"><h4 style="color:#ffd700 !important; margin-bottom:15px; font-weight:bold;">⭐ {t_nhà["ngôi_sao"]} ({m_data["đội_nhà"]})</h4>', unsafe_allow_html=True)
+        for lbl, val in t_nhà.get("star_stats", {}).items():
             st.markdown(f'<div class="card-player"><span class="stat-label">{lbl}</span><span class="stat-value">{val}</span></div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
     with c_s2:
-        st.markdown(f'<div class="glass-card"><h4 style="color:#ffd700 !important; margin-bottom:15px;">⭐ {t_khách["ngôi_sao"]} ({m_data["đội_khách"]})</h4>', unsafe_allow_html=True)
-        for lbl, val in t_khách["star_stats"].items():
+        st.markdown(f'<div class="glass-card"><h4 style="color:#ffd700 !important; margin-bottom:15px; font-weight:bold;">⭐ {t_khách["ngôi_sao"]} ({m_data["đội_khách"]})</h4>', unsafe_allow_html=True)
+        for lbl, val in t_khách.get("star_stats", {}).items():
             st.markdown(f'<div class="card-player"><span class="stat-label">{lbl}</span><span class="stat-value">{val}</span></div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -310,17 +322,35 @@ with tab1:
     st.write(f"🧠 **Giải thích đấu pháp:** {pred_reason} Đấu pháp thực dụng từ băng ghế chỉ đạo sẽ biến trận đấu thành một bàn cờ chiến thuật vô cùng nghẹt thở.")
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # 📋 DANH SÁCH KHỐI CHỮ ĐỘI HÌNH (BỎ SƠ ĐỒ HÌNH VẼ NHƯ TOÀN YÊU CẦU)
+    # 📋 DANH SÁCH KHỐI CHỮ ĐỘI HÌNH ĐÃ ÉP SÁNG CHỮ TRẮNG TOÀN DIỆN
     st.markdown('<div class="sub-title-custom">DANH SÁCH ĐỘI HÌNH RA SÂN DỰ KIẾN</div>', unsafe_allow_html=True)
+    
+    home_list_html = "".join([f'<div style="color:#ffffff; font-size:16px; margin-bottom:6px;">• {p}</div>' for p in t_nhà['đội_hinh']])
+    away_list_html = "".join([f'<div style="color:#ffffff; font-size:16px; margin-bottom:6px;">• {p}</div>' for p in t_khách['đội_hinh']])
+    
     col_l, col_r = st.columns(2)
     with col_l:
-        st.info(f"🔴 **{m_data['đội_nhà']} (Chiến thuật sơ đồ: {t_nhà['sơ_đồ']}):**\n\n" + "\n".join([f"- {p}" for p in t_nhà['đội_hinh']]))
+        st.markdown(f"""
+        <div class="lineup-home-box">
+            <strong style="color: #ffffff; font-size: 18px; text-transform:uppercase;">🔴 {m_data['đội_nhà']} (Sơ đồ: {t_nhà['sơ_đồ']})</strong><br><br>
+            {home_list_html}
+        </div>
+        """, unsafe_allow_html=True)
     with col_r:
-        st.success(f"🔵 **{m_data['đội_khách']} (Chiến thuật sơ đồ: {t_khách['sơ_đồ']}):**\n\n" + "\n".join([f"- {p}" for p in t_khách['đội_hinh']]))
+        st.markdown(f"""
+        <div class="lineup-away-box">
+            <strong style="color: #ffffff; font-size: 18px; text-transform:uppercase;">🔵 {m_data['đội_khách']} (Sơ đồ: {t_khách['sơ_đồ']})</strong><br><br>
+            {away_list_html}
+        </div>
+        """, unsafe_allow_html=True)
         
-    st.text(f"🌦️ Sân đấu tổ chức / Thời tiết khu vực: {m_data['thời_tiết']}")
+    st.write(f"🌦️ **Sân đấu tổ chức / Thời tiết khu vực:** {m_data['thời_tiết']}")
     if m_data['ti_so_ft'] != "":
-        st.error(f"🏁 Kết quả FT thực tế sau trận đấu: {m_data['ti_so_ft']} (HT: {m_data['ti_so_ht']})")
+        st.markdown(f"""
+        <div style="background-color:rgba(239, 68, 68, 0.2); padding:15px; border-radius:8px; border:1px solid #ef4444; margin-top:15px;">
+            <strong style="color:#ffffff;">🏁 KẾT QUẢ FT THỰC TẾ SAU TRẬN ĐẤU: <span style="color:#ffd700; font-size:20px;">{m_data['ti_so_ft']}</span> (Hiệp 1 HT: {m_data.get('ti_so_ht', 'Chưa cập nhật')})</strong>
+        </div>
+        """, unsafe_allow_html=True)
 
 # ==================================================================
 # TAB 2: PHÒNG ĐIỀU PHỐI DIỄN BIẾN TRẬN ĐẤU THỜI GIAN THỰC (HT/FT)
@@ -346,13 +376,20 @@ with tab2:
         st.toast("Hệ thống đã lưu kết quả trận đấu lên máy chủ đám mây!", icon="⚡")
 
 # ==================================================================
-# TAB 3: DANH SÁCH TOÀN BỘ 48 ĐỘI BÓNG ĐẦY ĐỦ THÔNG TIN CHI TIẾT
+# TAB 3: DANH SÁCH TOÀN BỘ 48 ĐỘI BÓNG VÀ FIX TRUY QUÉT LỖI SẬP KEYERROR
 # ==================================================================
 with tab3:
     st.markdown('<div class="sub-title-custom">CƠ SỞ DỮ LIỆU CHIẾN THUẬT TOÀN GIẢI ĐẤU</div>', unsafe_allow_html=True)
     team_list = []
     for t_name, t_val in TEAMS.items():
-        team_list.append([t_name, t_val['bảng'], t_val['hlv'], t_val['sơ_đồ'], t_val['lối_chơi'], t_val['ngôi_sao'], t_val['sức_mạnh']])
+        # Sử dụng hàm .get() thông minh để quét sạch lỗi khuyết phím dữ liệu
+        bảng = t_val.get('bảng', 'Vòng bảng')
+        hlv = t_val.get('hlv', 'Chưa cập nhật')
+        sơ_đồ = t_val.get('sơ_đồ', 'Chưa cập nhật')
+        lối_chơi = t_val.get('lối_chơi', 'Chưa cập nhật')
+        ngôi_sao = t_val.get('ngôi_sao', 'Chưa cập nhật')
+        sức_mạnh = t_val.get('sức_mạnh', 'Trung bình')
+        team_list.append([t_name, bảng, hlv, sơ_đồ, lối_chơi, ngôi_sao, sức_mạnh])
     
     team_df = pd.DataFrame(team_list, columns=["Tên Đội Bóng", "Bảng", "Huấn Luyện Viên", "Sơ Đồ Chiến Thuật", "Lối Chơi Chủ Đạo", "Ngôi Sao Gánh Đội", "Đánh Giá Cửa"])
     st.dataframe(team_df, use_container_width=True, height=450)
