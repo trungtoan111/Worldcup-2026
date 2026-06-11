@@ -24,7 +24,7 @@ st.markdown("""
 st.markdown('<div class="title-main">🏆 WORLD CUP 2026 - REALTIME AI DASHBOARD PRO</div>', unsafe_allow_html=True)
 st.markdown("---")
 
-# 2. DATABASE TỔNG LỰC: ĐỦ ĐỘI BÓNG, LOGO QUỐC KỲ, ẢNH CẦU THỦ & CHỈ SỐ NGUY HIỂM (HÌNH 4)
+# 2. DATABASE TỔNG LỰC: ĐỦ ĐỘI BÓNG, LOGO QUỐC KỲ, ẢNH CẦU THỦ & CHỈ SỐ NGUY HIỂM
 @st.cache_data
 def get_teams_data():
     return {
@@ -472,7 +472,7 @@ with tab3:
     st.subheader("🏃 Cơ sở dữ liệu chiến thuật toàn giải đấu")
     team_list = []
     for t_name, t_val in TEAMS.items():
-        team_list.append([t_name, t_val['bảng'], t_val['hlv'], t_val['sơ_đồ'], t_val['ngôi_sao'], t_val['sức_mạnh']])
+        team_list.append([t_name, t_val['bảng'], t_val['hlv'], t_val['sơ_đồ'], t_val['star_name'], t_val['sức_mạnh']])
     
     team_df = pd.DataFrame(team_list, columns=["Đội Bóng", "Bảng", "Huấn Luyện Viên", "Sơ Đồ Chiến Thuật", "Ngôi Sao Gánh Đội", "Đánh Giá Sức Mạnh"])
     st.dataframe(team_df, use_container_width=True, height=400)
