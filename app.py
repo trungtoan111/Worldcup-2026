@@ -1,532 +1,478 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
-# Thiết lập cấu hình trang web
-st.set_page_config(page_title="World Cup 2026 - Realtime AI Dashboard", layout="wide")
+# 1. CẤU HÌNH TRANG WEB & GIAO DIỆN CHỦ ĐẠO (DARK SPORTS THEME)
+st.set_page_config(page_title="World Cup 2026 - AI Dashboard Pro", layout="wide")
 
-# ------------------------------------------------------------------
-# 1. DATABASE CHUẨN CHỈNH: ĐỦ ĐỘI BÓNG, HLV VÀ 11 CẦU THỦ DỰ KIẾN
-# ------------------------------------------------------------------
+# Hệ thống CSS Custom độc quyền giúp giao diện hiển thị chuyên nghiệp như các trang báo lớn
+st.markdown("""
+<style>
+    .main { background-color: #0f172a; }
+    .title-main { color: #fecd3d; font-family: 'Poppins', sans-serif; font-size: 36px; font-weight: bold; text-align: center; margin-bottom: 25px; }
+    .card-vs { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 1px solid #475569; border-radius: 15px; padding: 25px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    .vs-text { font-size: 32px; font-weight: bold; color: #fecd3d; margin: 0 10px; }
+    .team-name { font-size: 24px; font-weight: bold; color: #ffffff; }
+    .hlv-text { font-size: 15px; color: #94a3b8; font-style: italic; }
+    .card-player { background: #1e293b; border-left: 5px solid #fecd3d; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .stat-label { color: #94a3b8; font-size: 15px; font-weight: 500; }
+    .stat-value { color: #ffffff; font-weight: bold; font-size: 16px; float: right; }
+    .ai-box { background: rgba(254, 205, 61, 0.1); border: 1px solid #fecd3d; border-radius: 12px; padding: 20px; margin-top: 15px; }
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown('<div class="title-main">🏆 WORLD CUP 2026 - REALTIME AI DASHBOARD PRO</div>', unsafe_allow_html=True)
+st.markdown("---")
+
+# 2. DATABASE TỔNG LỰC: ĐỦ ĐỘI BÓNG, LOGO QUỐC KỲ, ẢNH CẦU THỦ & CHỈ SỐ NGUY HIỂM (HÌNH 4)
 @st.cache_data
 def get_teams_data():
     return {
         # Bảng A
         "Mexico": {
-            "bảng": "A", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Khá", "ngôi_sao": "Santiago Giménez", "hlv": "Javier Aguirre",
+            "bảng": "A", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Khá", "hlv": "Javier Aguirre", "logo": "https://flagcdn.com/w80/mx.png",
+            "star_name": "Santiago Giménez", "star_img": "https://img.a.transfermarkt.technology/portrait/header/469254-1668673752.jpg",
+            "star_stats": {"Độ tuổi": "25 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m83", "CLB": "Feyenoord", "Phong độ": "🔥 9.0/10"},
             "lối_chơi": "Kiểm soát bóng ngắn, áp đặt thế trận, tấn công biên tốc độ",
             "đội_hinh": ["Guillermo Ochoa", "Jorge Sánchez", "César Montes", "Johan Vásquez", "Jesús Gallardo", "Edson Álvarez", "Luis Chávez", "Orbelín Pineda", "Roberto Alvarado", "Julián Quiñones", "Santiago Giménez"]
         },
         "Nam Phi": {
-            "bảng": "A", "sơ_đồ": "4-4-2", "sức_mạnh": "Trung bình", "ngôi_sao": "Percy Tau", "hlv": "Hugo Broos",
+            "bảng": "A", "sơ_đồ": "4-4-2", "sức_mạnh": "Trung bình", "hlv": "Hugo Broos", "logo": "https://flagcdn.com/w80/za.png",
+            "star_name": "Percy Tau", "star_img": "https://img.a.transfermarkt.technology/portrait/header/312239-1666617937.jpg",
+            "star_stats": {"Độ tuổi": "32 tuổi", "Vị trí": "Tiền đạo cánh (RW)", "Chiều cao": "1m75", "CLB": "Al Ahly", "Phong độ": "⭐ 7.5/10"},
             "lối_chơi": "Phòng ngự số đông, lùi sâu đội hình, phản công bóng dài",
             "đội_hinh": ["Ronwen Williams", "Khuliso Mudau", "Ime Okon", "Mbekezeli Mbokazi", "Aubrey Modiba", "Thalente Mbatha", "Yaya Sithole", "Teboho Mokoena", "Oswin Appollis", "Lyle Foster", "Percy Tau"]
         },
         "Hàn Quốc": {
-            "bảng": "A", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Khá", "ngôi_sao": "Son Heung-min", "hlv": "Hong Myung-bo",
+            "bảng": "A", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Khá", "hlv": "Hong Myung-bo", "logo": "https://flagcdn.com/w80/kr.png",
+            "star_name": "Son Heung-min", "star_img": "https://img.a.transfermarkt.technology/portrait/header/91845-1669106900.jpg",
+            "star_stats": {"Độ tuổi": "33 tuổi", "Vị trí": "Tiền đạo trái (LW)", "Chiều cao": "1m84", "CLB": "Tottenham", "Phong độ": "🔥 8.8/10"},
             "lối_chơi": "Đá giãn biên, chồng cánh tốc độ cao, áp sát pressing liên tục",
             "đội_hinh": ["Jo Hyeon-woo", "Kim Min-jae", "Kim Young-gwon", "Kim Jin-su", "Seol Young-woo", "Hwang In-beom", "Park Yong-woo", "Lee Kang-in", "Lee Jae-sung", "Hwang Hee-chan", "Son Heung-min"]
         },
         "CH Séc": {
-            "bảng": "A", "sơ_đồ": "3-4-2-1", "sức_mạnh": "Trung bình", "ngôi_sao": "Tomas Soucek", "hlv": "Ivan Hasek",
+            "bảng": "A", "sơ_đồ": "3-4-2-1", "sức_mạnh": "Trung bình", "hlv": "Ivan Hasek", "logo": "https://flagcdn.com/w80/cz.png",
+            "star_name": "Tomáš Souček", "star_img": "https://img.a.transfermarkt.technology/portrait/header/283628-1661282672.jpg",
+            "star_stats": {"Độ tuổi": "31 tuổi", "Vị trí": "Tiền vệ phòng ngự", "Chiều cao": "1m92", "CLB": "West Ham", "Phong độ": "⭐ 8.0/10"},
             "lối_chơi": "Kỷ luật thép, va chạm rực lửa, mạnh không chiến và cố định",
             "đội_hinh": ["Jindrich Stanek", "Tomas Holes", "Robin Hranac", "Ladislav Krejci", "Vladimir Coufal", "Tomas Soucek", "Lukas Provod", "David Doudera", "Vaclav Cerny", "Patrik Schick", "Jan Kuchta"]
         },
         "Argentina": {
-            "bảng": "A", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "ngôi_sao": "Lionel Messi", "hlv": "Lionel Scaloni",
+            "bảng": "A", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "hlv": "Lionel Scaloni", "logo": "https://flagcdn.com/w80/ar.png",
+            "star_name": "Lionel Messi", "star_img": "https://img.a.transfermarkt.technology/portrait/header/28003-1710151161.jpg",
+            "star_stats": {"Độ tuổi": "38 tuổi", "Vị trí": "Tiền đạo phải (RW)", "Chiều cao": "1m70", "CLB": "Inter Miami", "Phong độ": "👑 9.5/10"},
             "lối_chơi": "Kiểm soát bóng ngắn, luân chuyển bóng nhanh, đột biến trung lộ",
             "đội_hinh": ["Emi Martínez", "Nahuel Molina", "Cristian Romero", "Nicolás Otamendi", "Nicolás Tagliafico", "Rodrigo De Paul", "Enzo Fernández", "Alexis Mac Allister", "Lionel Messi", "Julián Álvarez", "Ángel Di María"]
         },
         "Algeria": {
-            "bảng": "A", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Khá", "ngôi_sao": "Riyad Mahrez", "hlv": "Vladimir Petkovic",
+            "bảng": "A", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Khá", "hlv": "Vladimir Petkovic", "logo": "https://flagcdn.com/w80/dz.png",
+            "star_name": "Riyad Mahrez", "star_img": "https://img.a.transfermarkt.technology/portrait/header/171424-1661376848.jpg",
+            "star_stats": {"Độ tuổi": "35 tuổi", "Vị trí": "Tiền đạo phải (RW)", "Chiều cao": "1m79", "CLB": "Al-Ahli", "Phong độ": "⭐ 8.2/10"},
             "lối_chơi": "Kỹ thuật cá nhân tốt, chuộng đá biên và ban bật ngắn",
             "đội_hinh": ["Anthony Mandrea", "Youcef Atal", "Aissa Mandi", "Ramy Bensebaini", "Rayyan Aït-Nouri", "Nabil Bentaleb", "Ismaël Bennacer", "Riyad Mahrez", "Houssem Aouar", "Saïd Benrahma", "Baghdad Bounedjah"]
         },
         # Bảng B
         "Canada": {
-            "bảng": "B", "sơ_đồ": "4-4-2", "sức_mạnh": "Trung bình", "ngôi_sao": "Alphonso Davies", "hlv": "Jesse Marsch",
+            "bảng": "B", "sơ_đồ": "4-4-2", "sức_mạnh": "Trung bình", "hlv": "Jesse Marsch", "logo": "https://flagcdn.com/w80/ca.png",
+            "star_name": "Alphonso Davies", "star_img": "https://img.a.transfermarkt.technology/portrait/header/424204-1667823528.jpg",
+            "star_stats": {"Độ tuổi": "25 tuổi", "Vị trí": "Hậu vệ trái (LB)", "Chiều cao": "1m83", "CLB": "Bayern Munich", "Phong độ": "🔥 8.7/10"},
             "lối_chơi": "Tấn công biên dựa vào tốc độ, chuyển trạng thái nhanh",
             "đội_hinh": ["Maxime Crépeau", "Alistair Johnston", "Moïse Bombito", "Derek Cornelius", "Alphonso Davies", "Tajon Buchanan", "Stephen Eustáquio", "Ismaël Koné", "Liam Millar", "Jonathan David", "Cyle Larin"]
         },
         "Bosnia": {
-            "bảng": "B", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Trung bình", "ngôi_sao": "Edin Dzeko", "hlv": "Sergej Barbarez",
+            "bảng": "B", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Trung bình", "hlv": "Sergej Barbarez", "logo": "https://flagcdn.com/w80/ba.png",
+            "star_name": "Edin Džeko", "star_img": "https://img.a.transfermarkt.technology/portrait/header/28396-1667554867.jpg",
+            "star_stats": {"Độ tuổi": "40 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m93", "CLB": "Fenerbahçe", "Phong độ": "⭐ 7.8/10"},
             "lối_chơi": "Chậm rãi, chắc chắn khu trung tuyến, tận dụng bóng bổng",
             "đội_hinh": ["Kenan Piric", "Anel Ahmedhodzic", "Dennis Hadzikadunic", "Sead Kolasinac", "Jusuf Gazibegovic", "Rade Krunic", "Benjamin Tahirovic", "Haris Hajradinovic", "Miroslav Stevanovic", "Ermedin Demirovic", "Edin Dzeko"]
         },
         "Qatar": {
-            "bảng": "B", "sơ_đồ": "5-3-2", "sức_mạnh": "Trung bình", "ngôi_sao": "Akram Afif", "hlv": "Tintín Márquez",
+            "bảng": "B", "sơ_đồ": "5-3-2", "sức_mạnh": "Trung bình", "hlv": "Tintín Márquez", "logo": "https://flagcdn.com/w80/qa.png",
+            "star_name": "Akram Afif", "star_img": "https://img.a.transfermarkt.technology/portrait/header/336647-1701332840.jpg",
+            "star_stats": {"Độ tuổi": "29 tuổi", "Vị trí": "Tiền đạo trái (LW)", "Chiều cao": "1m77", "CLB": "Al-Sadd", "Phong độ": "⭐ 8.1/10"},
             "lối_chơi": "Phòng ngự phản công, phối hợp nhỏ nhóm trung lộ",
             "đội_hinh": ["Meshaal Barsham", "Pedro Miguel", "Al-Mahdi Ali", "Lucas Mendes", "Tarek Salman", "Homam Ahmed", "Hassan Al-Haydos", "Ahmed Fathy", "Jassem Gaber", "Almoez Ali", "Akram Afif"]
         },
         "Thụy Sĩ": {
-            "bảng": "B", "sơ_đồ": "3-4-2-1", "sức_mạnh": "Khá", "ngôi_sao": "Granit Xhaka", "hlv": "Murat Yakin",
+            "bảng": "B", "sơ_đồ": "3-4-2-1", "sức_mạnh": "Khá", "hlv": "Murat Yakin", "logo": "https://flagcdn.com/w80/ch.png",
+            "star_name": "Granit Xhaka", "star_img": "https://img.a.transfermarkt.technology/portrait/header/90231-1668673070.jpg",
+            "star_stats": {"Độ tuổi": "33 tuổi", "Vị trí": "Tiền vệ trung tâm", "Chiều cao": "1m85", "CLB": "Bayer Leverkusen", "Phong độ": "🔥 8.9/10"},
             "lối_chơi": "Kỷ luật cao, tổ chức đội hình khoa học, bọc lót tốt",
             "đội_hinh": ["Yann Sommer", "Manuel Akanji", "Nico Elvedi", "Ricardo Rodríguez", "Silvan Widmer", "Remo Freuler", "Granit Xhaka", "Dan Ndoye", "Xherdan Shaqiri", "Ruben Vargas", "Breel Embolo"]
         },
         # Bảng C
         "Brazil": {
-            "bảng": "C", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "ngôi_sao": "Vinicius Jr", "hlv": "Dorival Júnior",
+            "bảng": "C", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "hlv": "Dorival Júnior", "logo": "https://flagcdn.com/w80/br.png",
+            "star_name": "Vinícius Júnior", "star_img": "https://img.a.transfermarkt.technology/portrait/header/371998-1669106099.jpg",
+            "star_stats": {"Độ tuổi": "25 tuổi", "Vị trí": "Tiền đạo trái (LW)", "Chiều cao": "1m76", "CLB": "Real Madrid", "Phong độ": "⚡ 9.4/10"},
             "lối_chơi": "Tấn công rực lửa, áp đặt thế trận kỹ thuật cá nhân đỉnh cao",
             "đội_hinh": ["Alisson Becker", "Danilo", "Marquinhos", "Gabriel Magalhães", "Wendell", "Bruno Guimarães", "Douglas Luiz", "Lucas Paquetá", "Rodrygo", "Raphinha", "Vinicius Jr"]
         },
         "Marocco": {
-            "bảng": "C", "sơ_đồ": "4-1-4-1", "sức_mạnh": "Khá", "ngôi_sao": "Hakimi", "hlv": "Walid Regragui",
+            "bảng": "C", "sơ_đồ": "4-1-4-1", "sức_mạnh": "Khá", "hlv": "Walid Regragui", "logo": "https://flagcdn.com/w80/ma.png",
+            "star_name": "Achraf Hakimi", "star_img": "https://img.a.transfermarkt.technology/portrait/header/398073-1668673854.jpg",
+            "star_stats": {"Độ tuổi": "27 tuổi", "Vị trí": "Hậu vệ phải (RB)", "Chiều cao": "1m81", "CLB": "PSG", "Phong độ": "🔥 8.9/10"},
             "lối_chơi": "Phòng ngự khối trung bình (Mid-block), kỷ luật thép phản công",
             "đội_hinh": ["Yassine Bounou", "Achraf Hakimi", "Nayef Aguerd", "Romain Saïss", "Yahia Attiyat Allah", "Sofyan Amrabat", "Azzedine Ounahi", "Selim Amallah", "Hakim Ziyech", "Amine Adli", "Youssef En-Nesyri"]
         },
         "Haiti": {
-            "bảng": "C", "sơ_đồ": "4-5-1", "sức_mạnh": "Yếu", "ngôi_sao": "Frantzdy Pierrot", "hlv": "Sébastien Migné",
+            "bảng": "C", "sơ_đồ": "4-5-1", "sức_mạnh": "Yếu", "hlv": "Sébastien Migné", "logo": "https://flagcdn.com/w80/ht.png",
+            "star_name": "Frantzdy Pierrot", "star_img": "https://img.a.transfermarkt.technology/portrait/header/413009-1533036669.jpg",
+            "star_stats": {"Độ tuổi": "31 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m94", "CLB": "Maccabi Haifa", "Phong độ": "⭐ 6.8/10"},
             "lối_chơi": "Phòng ngự lùi sâu, tận dụng thể lực áp sát tầm xa",
             "đội_hinh": ["Johny Placide", "Carlens Arcus", "Ricardo Adé", "Jean-Kevin Duverne", "Alex Christian", "Bryan Alceus", "Leverton Pierre", "Duckens Nazon", "Derrick Etienne", "Fafà Picault", "Frantzdy Pierrot"]
         },
         "Scotland": {
-            "bảng": "C", "sơ_đồ": "3-4-2-1", "sức_mạnh": "Trung bình", "ngôi_sao": "Andy Robertson", "hlv": "Steve Clarke",
+            "bảng": "C", "sơ_đồ": "3-4-2-1", "sức_mạnh": "Trung bình", "hlv": "Steve Clarke", "logo": "https://flagcdn.com/w80/gb-sct.png",
+            "star_name": "Andy Robertson", "star_img": "https://img.a.transfermarkt.technology/portrait/header/234803-1668674347.jpg",
+            "star_stats": {"Độ tuổi": "32 tuổi", "Vị trí": "Hậu vệ trái (LB)", "Chiều cao": "1m78", "CLB": "Liverpool", "Phong độ": "⭐ 8.0/10"},
             "lối_chơi": "Lối đá Anh truyền thống, tạt cánh đánh đầu, tranh chấp mạnh",
             "đội_hinh": ["Angus Gunn", "Jack Hendry", "Grant Hanley", "Scott McKenna", "Anthony Ralston", "Billy Gilmour", "Callum McGregor", "Andy Robertson", "Scott McTominay", "John McGinn", "Che Adams"]
         },
         # Bảng D
         "Mỹ": {
-            "bảng": "D", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "ngôi_sao": "Pulisic", "hlv": "Mauricio Pochettino",
+            "bảng": "D", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "hlv": "Mauricio Pochettino", "logo": "https://flagcdn.com/w80/us.png",
+            "star_name": "Christian Pulisic", "star_img": "https://img.a.transfermarkt.technology/portrait/header/315779-1669106201.jpg",
+            "star_stats": {"Độ tuổi": "27 tuổi", "Vị trí": "Tiền đạo trái (LW)", "Chiều cao": "1m77", "CLB": "AC Milan", "Phong độ": "🔥 8.7/10"},
             "lối_chơi": "Pressing tầm cao, chuyển trạng thái nhanh dựa vào tốc độ biên",
             "đội_hinh": ["Matt Turner", "Sergiño Dest", "Chris Richards", "Tim Ream", "Antonee Robinson", "Weston McKennie", "Tyler Adams", "Yunush Musah", "Timothy Weah", "Folarin Balogun", "Christian Pulisic"]
         },
         "Paraguay": {
-            "bảng": "D", "sơ_đồ": "4-4-2", "sức_mạnh": "Trung bình", "ngôi_sao": "Almirón", "hlv": "Gustavo Alfaro",
+            "bảng": "D", "sơ_đồ": "4-4-2", "sức_mạnh": "Trung bình", "hlv": "Gustavo Alfaro", "logo": "https://flagcdn.com/w80/py.png",
+            "star_name": "Miguel Almirón", "star_img": "https://img.a.transfermarkt.technology/portrait/header/272999-1668158522.jpg",
+            "star_stats": {"Độ tuổi": "32 tuổi", "Vị trí": "Tiền đạo phải (RW)", "Chiều cao": "1m74", "CLB": "Newcastle", "Phong độ": "⭐ 7.6/10"},
             "lối_chơi": "Thủ chặt phá lối chơi đối phương, không ngại va chạm áp sát",
             "đội_hinh": ["Carlos Coronel", "Robert Rojas", "Gustavo Gómez", "Junior Alonso", "Blas Riveros", "Miguel Almirón", "Mathías Villasanti", "Andrés Cubas", "Ramón Sosa", "Antonio Sanabria", "Álex Arce"]
         },
         "Úc": {
-            "bảng": "D", "sơ_đồ": "4-4-2", "sức_mạnh": "Trung bình", "ngôi_sao": "Harry Souttar", "hlv": "Tony Popovic",
+            "bảng": "D", "sơ_đồ": "4-4-2", "sức_mạnh": "Trung bình", "hlv": "Tony Popovic", "logo": "https://flagcdn.com/w80/au.png",
+            "star_name": "Harry Souttar", "star_img": "https://img.a.transfermarkt.technology/portrait/header/342939-1658402517.jpg",
+            "star_stats": {"Độ tuổi": "27 tuổi", "Vị trí": "Trung vệ (CB)", "Chiều cao": "1m98", "CLB": "Leicester City", "Phong độ": "⭐ 7.5/10"},
             "lối_chơi": "Thiên về thể chất, bóng bổng và các tình huống cố định",
             "đội_hinh": ["Mathew Ryan", "Gethin Jones", "Harry Souttar", "Kye Rowles", "Aziz Behich", "Martin Boyle", "Keanu Baccus", "Jackson Irvine", "Craig Goodwin", "Kusini Yengi", "Mitchell Duke"]
         },
         "Thổ Nhĩ Kỳ": {
-            "bảng": "D", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Khá", "ngôi_sao": "Arda Güler", "hlv": "Vincenzo Montella",
+            "bảng": "D", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Khá", "hlv": "Vincenzo Montella", "logo": "https://flagcdn.com/w80/tr.png",
+            "star_name": "Arda Güler", "star_img": "https://img.a.transfermarkt.technology/portrait/header/982959-1689255675.jpg",
+            "star_stats": {"Độ tuổi": "21 tuổi", "Vị trí": "Tiền vệ công (AM)", "Chiều cao": "1m75", "CLB": "Real Madrid", "Phong độ": "🔥 8.6/10"},
             "lối_chơi": "Kỷ luật, đá cống hiến, tấn công trung lộ rất mạnh",
             "đội_hinh": ["Mert Günok", "Zeki Çelik", "Samet Akaydin", "Abdülkerim Bardakcı", "Ferdi Kadıoğlu", "Hakan Çalhanoğlu", "Salih Özcan", "Cengiz Ünder", "Arda Güler", "Kerem Aktürkoğlu", "Barış Alper Yılmaz"]
         },
         # Bảng E
         "Đức": {
-            "bảng": "E", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "ngôi_sao": "Jamal Musiala", "hlv": "Julian Nagelsmann",
+            "bảng": "E", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "hlv": "Julian Nagelsmann", "logo": "https://flagcdn.com/w80/de.png",
+            "star_name": "Jamal Musiala", "star_img": "https://img.a.transfermarkt.technology/portrait/header/580195-1669106512.jpg",
+            "star_stats": {"Độ tuổi": "23 tuổi", "Vị trí": "Tiền vệ công (AM)", "Chiều cao": "1m84", "CLB": "Bayern Munich", "Phong độ": "🔥 9.3/10"},
             "lối_chơi": "Kiểm soát thế trận, pressing tầm cao, ban bật cự ly ngắn",
             "đội_hinh": ["Manuel Neuer", "Joshua Kimmich", "Jonathan Tah", "Antonio Rüdiger", "Maximilian Mittelstädt", "Robert Andrich", "Toni Kroos", "Jamal Musiala", "Ilkay Gündogan", "Florian Wirtz", "Kai Havertz"]
         },
         "Curacao": {
-            "bảng": "E", "sơ_đồ": "4-4-2", "sức_mạnh": "Yếu", "ngôi_sao": "Juninho Bacuna", "hlv": "Dick Advocaat",
+            "bảng": "E", "sơ_đồ": "4-4-2", "sức_mạnh": "Yếu", "hlv": "Dick Advocaat", "logo": "https://flagcdn.com/w80/cw.png",
+            "star_name": "Juninho Bacuna", "star_img": "https://img.a.transfermarkt.technology/portrait/header/340456-1614246894.jpg",
+            "star_stats": {"Độ tuổi": "28 tuổi", "Vị trí": "Tiền vệ trung tâm", "Chiều cao": "1m78", "CLB": "Birmingham", "Phong độ": "⭐ 6.5/10"},
             "lối_chơi": "Phòng ngự số đông, tận dụng tốc độ tiền đạo bứt tốc",
             "đội_hinh": ["Eloy Room", "Jurien Gaari", "Roshon van Eijma", "Cuco Martina", "Sherel Floranus", "Brandley Kuwas", "Vurnon Anita", "Leandro Bacuna", "Kenji Gorré", "Rangelo Janga", "Juninho Bacuna"]
         },
         "Bờ Biển Ngà": {
-            "bảng": "E", "sơ_đồ": "4-3-3", "sức_mạnh": "Trung bình", "ngôi_sao": "Franck Kessié", "hlv": "Emerse Faé",
+            "bảng": "E", "sơ_đồ": "4-3-3", "sức_mạnh": "Trung bình", "hlv": "Emerse Faé", "logo": "https://flagcdn.com/w80/ci.png",
+            "star_name": "Franck Kessié", "star_img": "https://img.a.transfermarkt.technology/portrait/header/294808-1663162794.jpg",
+            "star_stats": {"Độ tuổi": "29 tuổi", "Vị trí": "Tiền vệ trung tâm", "Chiều cao": "1m83", "CLB": "Al-Ahli", "Phong độ": "⭐ 7.9/10"},
             "lối_chơi": "Cậy nhờ thể lực, giàu tốc độ, đá trực diện áp sát",
             "đội_hinh": ["Yahia Fofana", "Wilfried Singo", "Ousmane Diomande", "Evan Ndicka", "Ghislain Konan", "Franck Kessié", "Jean Michaël Seri", "Seko Fofana", "Max Gradel", "Simon Adingra", "Sebastien Haller"]
         },
         "Ecuador": {
-            "bảng": "E", "sơ_đồ": "3-4-3", "sức_mạnh": "Khá", "ngôi_sao": "Moisés Caicedo", "hlv": "Sebastián Beccacece",
+            "bảng": "E", "sơ_đồ": "3-4-3", "sức_mạnh": "Khá", "hlv": "Sebastián Beccacece", "logo": "https://flagcdn.com/w80/ec.png",
+            "star_name": "Moisés Caicedo", "star_img": "https://img.a.transfermarkt.technology/portrait/header/487964-1668673327.jpg",
+            "star_stats": {"Độ tuổi": "24 tuổi", "Vị trí": "Tiền vệ trung tâm", "Chiều cao": "1m78", "CLB": "Chelsea", "Phong độ": "🔥 8.5/10"},
             "lối_chơi": "Đá rực lửa, pressing mạnh ở biên, giàu thể lực",
             "đội_hinh": ["Alexander Domínguez", "Félix Torres", "Willian Pacho", "Piero Hincapié", "Angelo Preciado", "Moisés Caicedo", "Alan Franco", "Pervis Estupiñán", "Kendry Páez", "Jeremy Sarmiento", "Enner Valencia"]
         },
         # Bảng F
         "Hà Lan": {
-            "bảng": "F", "sơ_đồ": "3-4-3", "sức_mạnh": "Mạnh", "ngôi_sao": "Virgil van Dijk", "hlv": "Ronald Koeman",
+            "bảng": "F", "sơ_đồ": "3-4-3", "sức_mạnh": "Mạnh", "hlv": "Ronald Koeman", "logo": "https://flagcdn.com/w80/nl.png",
+            "star_name": "Virgil van Dijk", "star_img": "https://img.a.transfermarkt.technology/portrait/header/139208-1669106757.jpg",
+            "star_stats": {"Độ tuổi": "34 tuổi", "Vị trí": "Trung vệ (CB)", "Chiều cao": "1m95", "CLB": "Liverpool", "Phong độ": "🔥 9.0/10"},
             "lối_chơi": "Tấn công tổng lực, đẩy cao hai biên, kiểm soát bóng chủ động",
             "đội_hinh": ["Bart Verbruggen", "Lutsharel Geertruida", "Virgil van Dijk", "Nathan Aké", "Denzel Dumfries", "Jerdy Schouten", "Tijjani Reijnders", "Daley Blind", "Xavi Simons", "Cody Gakpo", "Memphis Depay"]
         },
         "Nhật Bản": {
-            "bảng": "F", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Khá", "ngôi_sao": "Kaoru Mitoma", "hlv": "Hajime Moriyasu",
+            "bảng": "F", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Khá", "hlv": "Hajime Moriyasu", "logo": "https://flagcdn.com/w80/jp.png",
+            "star_name": "Kaoru Mitoma", "star_img": "https://img.a.transfermarkt.technology/portrait/header/504849-1669107147.jpg",
+            "star_stats": {"Độ tuổi": "29 tuổi", "Vị trí": "Tiền đạo trái (LW)", "Chiều cao": "1m78", "CLB": "Brighton", "Phong độ": "🔥 8.6/10"},
             "lối_chơi": "Phối hợp nhóm nhỏ tốc độ cao, kỷ luật vị trí cực tốt",
             "đội_hinh": ["Zion Suzuki", "Yukinari Sugawara", "Ko Itakura", "Shogo Taniguchi", "Hiroki Ito", "Wataru Endo", "Hidemasa Morita", "Takefusa Kubo", "Takumi Minamino", "Kaoru Mitoma", "Ayase Ueda"]
         },
         "Thụy Điển": {
-            "bảng": "F", "sơ_đồ": "4-4-2", "sức_mạnh": "Khá", "ngôi_sao": "Alexander Isak", "hlv": "Jon Dahl Tomasson",
+            "bảng": "F", "sơ_đồ": "4-4-2", "sức_mạnh": "Khá", "hlv": "Jon Dahl Tomasson", "logo": "https://flagcdn.com/w80/se.png",
+            "star_name": "Viktor Gyökeres", "star_img": "https://img.a.transfermarkt.technology/portrait/header/325443-1698658826.jpg",
+            "star_stats": {"Độ tuổi": "28 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m87", "CLB": "Sporting CP", "Phong độ": "🔥 9.1/10"},
             "lối_chơi": "Tổ chức chặt chẽ, chơi bóng dài bổng hiệu quả",
             "đội_hinh": ["Robin Olsen", "Emil Holm", "Isak Hien", "Victor Lindelöf", "Ludwig Augustinsson", "Dejan Kulusevski", "Jens Cajuste", "Anton Salétros", "Emil Forsberg", "Viktor Gyökeres", "Alexander Isak"]
         },
         "Tunisia": {
-            "bảng": "F", "sơ_đồ": "4-5-1", "sức_mạnh": "Trung bình", "ngôi_sao": "Ellyes Skhiri", "hlv": "Faouzi Benzarti",
+            "bảng": "F", "sơ_đồ": "4-5-1", "sức_mạnh": "Trung bình", "hlv": "Faouzi Benzarti", "logo": "https://flagcdn.com/w80/tn.png",
+            "star_name": "Ellyes Skhiri", "star_img": "https://img.a.transfermarkt.technology/portrait/header/290623-1668673738.jpg",
+            "star_stats": {"Độ tuổi": "31 tuổi", "Vị trí": "Tiền vệ trung tâm", "Chiều cao": "1m85", "CLB": "Eintracht Frankfurt", "Phong độ": "⭐ 7.4/10"},
             "lối_chơi": "Phòng ngự kỷ luật, phá lối chơi đối phương",
             "đội_hinh": ["Bechir Ben Saïd", "Wajdi Kechrida", "Dylan Bronn", "Montassar Talbi", "Ali Abdi", "Ellyes Skhiri", "Aïssa Laïdouni", "Anis Ben Slimane", "Hamza Rafia", "Sayfallah Ltaief", "Youssef Msakni"]
         },
         # Bảng G
         "Bỉ": {
-            "bảng": "G", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "ngôi_sao": "Kevin De Bruyne", "hlv": "Domenico Tedesco",
+            "bảng": "G", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "hlv": "Domenico Tedesco", "logo": "https://flagcdn.com/w80/be.png",
+            "star_name": "Kevin De Bruyne", "star_img": "https://img.a.transfermarkt.technology/portrait/header/88755-1669106297.jpg",
+            "star_stats": {"Độ tuổi": "34 tuổi", "Vị trí": "Tiền vệ trung tâm", "Chiều cao": "1m81", "CLB": "Manchester City", "Phong độ": "🔥 9.2/10"},
             "lối_chơi": "Tấn công trung lộ, ban bật nhanh dựa vào các tiền vệ sáng tạo",
             "đội_hinh": ["Koen Casteels", "Timothy Castagne", "Wout Faes", "Jan Vertonghen", "Arthur Theate", "Orel Mangala", "Amadou Onana", "Kevin De Bruyne", "Jérémy Doku", "Leandro Trossard", "Romelu Lukaku"]
         },
         "Ai Cập": {
-            "bảng": "G", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "ngôi_sao": "Mohamed Salah", "hlv": "Hossam Hassan",
+            "bảng": "G", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "hlv": "Hossam Hassan", "logo": "https://flagcdn.com/w80/eg.png",
+            "star_name": "Mohamed Salah", "star_img": "https://img.a.transfermarkt.technology/portrait/header/148455-1669106471.jpg",
+            "star_stats": {"Độ tuổi": "33 tuổi", "Vị trí": "Tiền đạo phải (RW)", "Chiều cao": "1m75", "CLB": "Liverpool", "Phong độ": "🔥 9.0/10"},
             "lối_chơi": "Phòng ngự chặt, dồn bóng cho ngôi sao đột phá tốc độ",
             "đội_hinh": ["Mohamed El Shenawy", "Mohamed Hany", "Mohamed Abdelmonem", "Yasser Ibrahim", "Ali Maâloul", "Marwan Attia", "Mohamed Elneny", "Hamdi Fathi", "Mohamed Salah", "Trézéguet", "Mostafa Mohamed"]
         },
         "Iran": {
-            "bảng": "G", "sơ_đồ": "4-4-2", "sức_mạnh": "Khá", "ngôi_sao": "Mehdi Taremi", "hlv": "Amir Ghalenoei",
+            "bảng": "G", "sơ_đồ": "4-4-2", "sức_mạnh": "Khá", "hlv": "Amir Ghalenoei", "logo": "https://flagcdn.com/w80/ir.png",
+            "star_name": "Mehdi Taremi", "star_img": "https://img.a.transfermarkt.technology/portrait/header/322301-1668673719.jpg",
+            "star_stats": {"Độ tuổi": "33 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m87", "CLB": "Inter Milan", "Phong độ": "⭐ 8.1/10"},
             "lối_chơi": "Khối phòng ngự lùi sâu vững chãi, phản công sắc bén",
             "đội_hinh": ["Alireza Beiranvand", "Ramin Rezaeian", "Hossein Kanaanizadegan", "Shojae Khalilzadeh", "Milad Mohammadi", "Saman Ghoddos", "Saeid Ezatolahi", "Alireza Jahanbakhsh", "Mehdi Torabi", "Sardar Azmoun", "Mehdi Taremi"]
         },
         "New Zealand": {
-            "bảng": "G", "sơ_đồ": "4-4-2", "sức_mạnh": "Yếu", "ngôi_sao": "Chris Wood", "hlv": "Darren Bazeley",
+            "bảng": "G", "sơ_đồ": "4-4-2", "sức_mạnh": "Yếu", "hlv": "Darren Bazeley", "logo": "https://flagcdn.com/w80/nz.png",
+            "star_name": "Chris Wood", "star_img": "https://img.a.transfermarkt.technology/portrait/header/108725-1658402127.jpg",
+            "star_stats": {"Độ tuổi": "34 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m91", "CLB": "Nottingham Forest", "Phong độ": "⭐ 7.2/10"},
             "lối_chơi": "Bóng bổng, dựa vào thể hình tranh chấp bóng hai",
             "đội_hinh": ["Oliver Sail", "Tim Payne", "Michael Boxall", "Nando Pijnaker", "Liberato Cacace", "Joe Bell", "Matthew Garbett", "Sarpreet Singh", "Ben Old", "Kosta Barbarouses", "Chris Wood"]
         },
         # Bảng H
         "Tây Ban Nha": {
-            "bảng": "H", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "ngôi_sao": "Lamine Yamal", "hlv": "Luis de la Fuente",
+            "bảng": "H", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "hlv": "Luis de la Fuente", "logo": "https://flagcdn.com/w80/es.png",
+            "star_name": "Lamine Yamal", "star_img": "https://img.a.transfermarkt.technology/portrait/header/1057013-1683103444.jpg",
+            "star_stats": {"Độ tuổi": "18 tuổi", "Vị trí": "Tiền đạo phải (RW)", "Chiều cao": "1m80", "CLB": "Barcelona", "Phong độ": "👑 9.6/10"},
             "lối_chơi": "Tiki-taka hiện đại, luân chuyển bóng cực nhanh, kiểm soát tuyệt đối",
             "đội_hinh": ["Unai Simón", "Dani Carvajal", "Robin Le Normand", "Aymeric Laporte", "Marc Cucurella", "Rodri", "Pedri", "Fabian Ruiz", "Lamine Yamal", "Nico Williams", "Alvaro Morata"]
         },
         "Cabo Verde": {
-            "bảng": "H", "sơ_đồ": "4-3-3", "sức_mạnh": "Trung bình", "ngôi_sao": "Ryan Mendes", "hlv": "Bubista",
+            "bảng": "H", "sơ_đồ": "4-3-3", "sức_mạnh": "Trung bình", "hlv": "Bubista", "logo": "https://flagcdn.com/w80/cv.png",
+            "star_name": "Ryan Mendes", "star_img": "https://img.a.transfermarkt.technology/portrait/header/102371-1510651713.jpg",
+            "star_stats": {"Độ tuổi": "36 tuổi", "Vị trí": "Tiền đạo cánh (RW)", "Chiều cao": "1m78", "CLB": "Fatih Karagümrük", "Phong độ": "⭐ 6.9/10"},
             "lối_chơi": "Chơi phòng ngự phản công dựa vào tốc độ các cầu thủ chạy cánh",
             "đội_hinh": ["Vozinha", "Steven Moreira", "Logan Costa", "Roberto Lopes", "João Paulo", "Kevin Pina", "Jamiro Monteiro", "Deroy Duarte", "Ryan Mendes", "Garry Rodrigues", "Jovane Cabral"]
         },
         "Saudi Arabia": {
-            "bảng": "H", "sơ_đồ": "4-5-1", "sức_mạnh": "Trung bình", "ngôi_sao": "Salem Al-Dawsari", "hlv": "Roberto Mancini",
+            "bảng": "H", "sơ_đồ": "4-5-1", "sức_mạnh": "Trung bình", "hlv": "Roberto Mancini", "logo": "https://flagcdn.com/w80/sa.png",
+            "star_name": "Salem Al-Dawsari", "star_img": "https://img.a.transfermarkt.technology/portrait/header/211754-1669106803.jpg",
+            "star_stats": {"Độ tuổi": "34 tuổi", "Vị trí": "Tiền đạo trái (LW)", "Chiều cao": "1m71", "CLB": "Al-Hilal", "Phong độ": "⭐ 7.7/10"},
             "lối_chơi": "Áp sát tầm cao, bẫy việt vị, đá gắn kết kỷ luật",
             "đội_hinh": ["Mohammed Al-Owais", "Saud Abdulhamid", "Ali Lajami", "Ali Al-Bulaihi", "Yasir Al-Shahrani", "Abdullah Otayf", "Mohamed Kanno", "Firas Al-Buraikan", "Salman Al-Faraj", "Salem Al-Dawsari", "Saleh Al-Shehri"]
         },
         "Uruguay": {
-            "bảng": "H", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "ngôi_sao": "Federico Valverde", "hlv": "Marcelo Bielsa",
+            "bảng": "H", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "hlv": "Marcelo Bielsa", "logo": "https://flagcdn.com/w80/uy.png",
+            "star_name": "Federico Valverde", "star_img": "https://img.a.transfermarkt.technology/portrait/header/369081-1669106173.jpg",
+            "star_stats": {"Độ tuổi": "27 tuổi", "Vị trí": "Tiền vệ trung tâm", "Chiều cao": "1m82", "CLB": "Real Madrid", "Phong độ": "🔥 9.1/10"},
             "lối_chơi": "Pressing điên cuồng, va chạm rực lửa, tấn công trực diện",
             "đội_hinh": ["Sergio Rochet", "Nahitan Nández", "Ronald Araújo", "José María Giménez", "Mathías Olivera", "Federico Valverde", "Manuel Ugarte", "Nicolás de la Cruz", "Facundo Pellistri", "Darwin Núñez", "Maximilian Araújo"]
         },
         # Bảng I
         "Pháp": {
-            "bảng": "I", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "ngôi_sao": "Kylian Mbappé", "hlv": "Didier Deschamps",
+            "bảng": "I", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "hlv": "Didier Deschamps", "logo": "https://flagcdn.com/w80/fr.png",
+            "star_name": "Kylian Mbappé", "star_img": "https://img.a.transfermarkt.technology/portrait/header/342229-1669106304.jpg",
+            "star_stats": {"Độ tuổi": "27 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m78", "CLB": "Real Madrid", "Phong độ": "👑 9.5/10"},
             "lối_chơi": "Tấn công trực diện tốc độ cao bằng hành lang biên",
             "đội_hinh": ["Mike Maignan", "Jules Koundé", "Dayot Upamecano", "William Saliba", "Théo Hernandez", "N'Golo Kanté", "Aurélien Tchouaméni", "Ousmane Dembélé", "Antoine Griezmann", "Bradley Barcola", "Kylian Mbappé"]
         },
         "Senegal": {
-            "bảng": "I", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "ngôi_sao": "Sadio Mané", "hlv": "Aliou Cissé",
+            "bảng": "I", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "hlv": "Aliou Cissé", "logo": "https://flagcdn.com/w80/sn.png",
+            "star_name": "Sadio Mané", "star_img": "https://img.a.transfermarkt.technology/portrait/header/200512-1668673323.jpg",
+            "star_stats": {"Độ tuổi": "34 tuổi", "Vị trí": "Tiền đạo cánh (LW)", "Chiều cao": "1m74", "CLB": "Al-Nassr", "Phong độ": "⭐ 8.0/10"},
             "lối_chơi": "Cân bằng giữa thể lực và kỹ thuật, đá áp sát nhanh",
             "đội_hinh": ["Édouard Mendy", "Formose Mendy", "Kalidou Koulibaly", "Abdou Diallo", "Ismail Jakobs", "Idrissa Gueye", "Pape Matar Sarr", "Lamine Camara", "Ismaïla Sarr", "Nicolas Jackson", "Sadio Mané"]
         },
         "Iraq": {
-            "bảng": "I", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Trung bình", "ngôi_sao": "Aymen Hussein", "hlv": "Jesús Casas",
+            "bảng": "I", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Trung bình", "hlv": "Jesús Casas", "logo": "https://flagcdn.com/w80/iq.png",
+            "star_name": "Aymen Hussein", "star_img": "https://img.a.transfermarkt.technology/portrait/header/350974-1711202861.jpg",
+            "star_stats": {"Độ tuổi": "30 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m89", "CLB": "Al-Khor", "Phong độ": "⭐ 7.9/10"},
             "lối_chơi": "Đá tinh quái, không ngại va chạm, mạnh tấn công trung lộ",
             "đội_hinh": ["Jalal Hassan", "Hussein Ali", "Saad Natiq", "Rebin Sulaka", "Merchas Doski", "Amir Al-Ammari", "Osama Rashid", "Ibrahim Bayesh", "Zidane Iqbal", "Ali Jasim", "Aymen Hussein"]
         },
         "Na Uy": {
-            "bảng": "I", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "ngôi_sao": "Erling Haaland", "hlv": "Ståle Solbakken",
+            "bảng": "I", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "hlv": "Ståle Solbakken", "logo": "https://flagcdn.com/w80/no.png",
+            "star_name": "Erling Haaland", "star_img": "https://img.a.transfermarkt.technology/portrait/header/418560-1669106825.jpg",
+            "star_stats": {"Độ tuổi": "25 tuổi", "Vị trí": "Tiền đạo cắm (ST)", "Chiều cao": "1m94", "CLB": "Manchester City", "Phong độ": "🔥 9.4/10"},
             "lối_chơi": "Tấn công trục dọc, nhồi bóng cho trung phong cắm ghi bàn",
             "đội_hinh": ["Ørjan Nyland", "Julian Ryerson", "Leo Östigard", "Kristoffer Ajer", "David Møller Wolfe", "Martin Ødegaard", "Patrick Berg", "Sander Berge", "Oscar Bobb", "Antonio Nusa", "Erling Haaland"]
         },
-        # Bảng J
-        "Áo": {
-            "bảng": "J", "sơ_đồ": "4-2-2-2", "sức_mạnh": "Khá", "ngôi_sao": "David Alaba", "hlv": "Ralf Rangnick",
-            "lối_chơi": "Gegenpressing điên cuồng, bóp nghẹt không gian đối thủ",
-            "đội_hinh": ["Patrick Pentz", "Stefan Posch", "Kevin Danso", "David Alaba", "Phillipp Mwene", "Nicolas Seiwald", "Konrad Laimer", "Marcel Sabitzer", "Christoph Baumgartner", "Michael Gregoritsch", "Marko Arnautovic"]
-        },
-        "Jordan": {
-            "bảng": "J", "sơ_đồ": "3-4-3", "sức_mạnh": "Trung bình", "ngôi_sao": "Mousa Al-Tamari", "hlv": "Jamal Sellami",
-            "lối_chơi": "Phòng ngự kỷ luật, phản công chớp nhoáng ở biên",
-            "đội_hinh": ["Yazeed Abulaila", "Abdallah Nasib", "Yazan Al-Arab", "Salem Al-Ajalin", "Ehsan Haddad", "Nizar Al-Rashdan", "Noor Al-Rawabdeh", "Mahmoud Al-Mardi", "Mousa Al-Tamari", "Ali Olwan", "Yazan Al-Naimat"]
-        },
-        # Bảng K
-        "Bồ Đào Nha": {
-            "bảng": "K", "sơ_đồ": "4-3-3", "sức_mạnh": "Mạnh", "ngôi_sao": "Bruno Fernandes", "hlv": "Roberto Martínez",
-            "lối_chơi": "Tấn công áp đặt đa dạng, hoán đổi vị trí biên liên tục",
-            "đội_hinh": ["Diogo Costa", "João Cancelo", "Rúben Dias", "Pepe", "Nuno Mendes", "João Palhinha", "Vitinha", "Bruno Fernandes", "Bernardo Silva", "Rafael Leão", "Cristiano Ronaldo"]
-        },
-        "Uzbekistan": {
-            "bảng": "K", "sơ_đồ": "3-4-2-1", "sức_mạnh": "Trung bình", "ngôi_sao": "Eldor Shomurodov", "hlv": "Srecko Katanec",
-            "lối_chơi": "Tính kỷ luật chiến thuật cực cao, thủ chặt phản công sắc",
-            "đội_hinh": ["Utkir Yusupov", "Abdukodir Khusanov", "Umar Eshmurodov", "Rustam Ashurmatov", "Khojiakbar Alijonov", "Otabek Shukurov", "Odiljon Hamrobekov", "Sherzod Nasrullaev", "Abbosbek Fayzullaev", "Jaloliddin Masharipov", "Eldor Shomurodov"]
-        },
-        "Colombia": {
-            "bảng": "K", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "ngôi_sao": "Luis Díaz", "hlv": "Néstor Lorenzo",
-            "lối_chơi": "Đá kỹ thuật và rực lửa Nam Mỹ, đột biến hành lang cánh",
-            "đội_hinh": ["Camilo Vargas", "Daniel Muñoz", "Davinson Sánchez", "Carlos Cuesta", "Johan Mojica", "Richard Ríos", "Jefferson Lerma", "Jhon Arias", "James Rodríguez", "Luis Díaz", "Jhon Córdoba"]
-        },
-        "CHDC Congo": {
-            "bảng": "K", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Trung bình", "ngôi_sao": "Chancel Mbemba", "hlv": "Sébastien Desabre",
-            "lối_chơi": "Đá giàu tốc độ và va chạm thể lực từ khu trung tuyến",
-            "đội_hinh": ["Lionel Mpasi", "Gédéon Kalulu", "Chancel Mbemba", "Henoc Inonga", "Arthur Masuaku", "Samuel Moutoussamy", "Charles Pickel", "Theo Bongonda", "Gaël Kakuta", "Yoane Wissa", "Cédric Bakambu"]
-        },
         # Bảng L
         "Anh": {
-            "bảng": "L", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "ngôi_sao": "Jude Bellingham", "hlv": "Thomas Tuchel",
+            "bảng": "L", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Mạnh", "hlv": "Thomas Tuchel", "logo": "https://flagcdn.com/w80/gb-eng.png",
+            "star_name": "Jude Bellingham", "star_img": "https://img.a.transfermarkt.technology/portrait/header/581678-1669106450.jpg",
+            "star_stats": {"Độ tuổi": "22 tuổi", "Vị trí": "Tiền vệ công (AM)", "Chiều cao": "1m86", "CLB": "Real Madrid", "Phong độ": "👑 9.5/10"},
             "lối_chơi": "Tấn công biên dồn dập, kiểm soát nửa sân đối phương, cố định mạnh",
             "đội_hinh": ["Jordan Pickford", "Kyle Walker", "John Stones", "Marc Guéhi", "Kieran Trippier", "Declan Rice", "Kobbie Mainoo", "Bukayo Saka", "Jude Bellingham", "Phil Foden", "Harry Kane"]
         },
         "Croatia": {
-            "bảng": "L", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "ngôi_sao": "Luka Modric", "hlv": "Zlatko Dalic",
+            "bảng": "L", "sơ_đồ": "4-3-3", "sức_mạnh": "Khá", "hlv": "Zlatko Dalić", "logo": "https://flagcdn.com/w80/hr.png",
+            "star_name": "Luka Modrić", "star_img": "https://img.a.transfermarkt.technology/portrait/header/27992-1669106188.jpg",
+            "star_stats": {"Độ tuổi": "40 tuổi", "Vị trí": "Tiền vệ trung tâm", "Chiều cao": "1m72", "CLB": "Real Madrid", "Phong độ": "⭐ 8.3/10"},
             "lối_chơi": "Làm chủ khu trung tuyến, cầm nhịp trận đấu chậm rãi tinh tế",
             "đội_hinh": ["Dominik Livakovic", "Josip Stanisic", "Josip Sutalo", "Marin Pongracic", "Josko Gvardiol", "Luka Modric", "Marcelo Brozovic", "Mateo Kovacic", "Lovro Majer", "Andrejan Kramaric", "Ante Budimir"]
-        },
-        "Ghana": {
-            "bảng": "L", "sơ_đồ": "4-2-3-1", "sức_mạnh": "Trung bình", "ngôi_sao": "Mohammed Kudus", "hlv": "Otto Addo",
-            "lối_chơi": "Tấn công trực diện, bứt tốc quãng ngắn mạnh mẽ",
-            "đội_hinh": ["Lawrence Ati-Zigi", "Alidu Seidu", "Alexander Djiku", "Mohammed Salisu", "Gideon Mensah", "Salo Abdul Samed", "Thomas Partey", "Jordan Ayew", "Mohammed Kudus", "Ernest Nuamah", "Inaki Williams"]
-        },
-        "Panama": {
-            "bảng": "L", "sơ_đồ": "5-4-1", "sức_mạnh": "Trung bình", "ngôi_sao": "Michael Murillo", "hlv": "Thomas Christiansen",
-            "lối_chơi": "Phòng ngự số đông co cụm, phá bóng rát",
-            "đội_hinh": ["Orlando Mosquera", "Michael Murillo", "José Córdoba", "Edgardo Fariña", "Roderick Miller", "Eric Davis", "Aníbal Godoy", "Adalberto Carrasquilla", "José Luis Rodríguez", "Yoel Bárcenas", "José Fajardo"]
         }
     }
 
 TEAMS = get_teams_data()
+
+# Hàm bổ trợ lấy thông tin phòng hờ lỗi
 def get_team_info(name):
     return TEAMS.get(name, {
         "bảng": "Vòng bảng", "sơ_đồ": "4-2-3-1", "lối_chơi": "Lối chơi tập thể", "ngôi_sao": "Đội trưởng", "sức_mạnh": "Trung bình", "hlv": "Chưa cập nhật",
+        "logo": "https://flagcdn.com/w80/un.png",
+        "star_name": "Chưa cập nhật", "star_img": "https://flagcdn.com/w80/un.png",
+        "star_stats": {"Độ tuổi": "Chưa rõ", "Vị trí": "Chưa rõ", "Chiều cao": "Chưa rõ", "CLB": "Tự do", "Phong độ": "0/10"},
         "đội_hinh": ["Thủ môn", "Hậu vệ 1", "Hậu vệ 2", "Hậu vệ 3", "Hậu vệ 4", "Tiền vệ 1", "Tiền vệ 2", "Tiền vệ 3", "Tiền đạo 1", "Tiền đạo 2", "Tiền đạo 3"]
     })
 
-# ------------------------------------------------------------------
-# 2. KHỞI TẠO LỊCH THI ĐẤU CHUẨN VÀ THỜI TIẾT REAL-TIME
-# ------------------------------------------------------------------
+# 3. KHỞI TẠO LỊCH THI ĐẤU CHUẨN (MỞ RỘNG)
 if 'matches' not in st.session_state:
     raw_schedule = [
-        # Lượt 1
-        ["WC-01", "Bảng A", "12/06", "02:00", "Mexico", "Nam Phi", "VTV3, VTV10, VTV6", "Mát mẻ, 24°C (Sân Azteca)"],
+        ["WC-01", "Bảng A", "12/06", "02:00", "Mexico", "Nam Phi", "VTV3, VTV6", "Mát mẻ, 24°C (Sân Azteca)"],
         ["WC-02", "Bảng A", "12/06", "09:00", "Hàn Quốc", "CH Séc", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-03", "Bảng B", "13/06", "02:00", "Canada", "Bosnia", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
+        ["WC-03", "Bảng B", "13/06", "02:00", "Canada", "Bosnia", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
         ["WC-04", "Bảng D", "13/06", "08:00", "Mỹ", "Paraguay", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-05", "Bảng B", "14/06", "02:00", "Qatar", "Thụy Sĩ", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
         ["WC-06", "Bảng C", "14/06", "05:00", "Brazil", "Marocco", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-07", "Bảng C", "14/06", "08:00", "Haiti", "Scotland", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-08", "Bảng D", "14/06", "11:00", "Úc", "Thổ Nhĩ Kỳ", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-09", "Bảng E", "15/06", "00:00", "Đức", "Curacao", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-10", "Bảng F", "15/06", "03:00", "Hà Lan", "Nhật Bản", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-11", "Bảng E", "15/06", "06:00", "Bờ Biển Ngà", "Ecuador", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-12", "Bảng F", "15/06", "09:00", "Thụy Điển", "Tunisia", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-13", "Bảng H", "15/06", "23:00", "Tây Ban Nha", "Cabo Verde", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-14", "Bảng G", "16/06", "02:00", "Bỉ", "Ai Cập", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-15", "Bảng H", "16/06", "05:00", "Saudi Arabia", "Uruguay", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-16", "Bảng G", "16/06", "08:00", "Iran", "New Zealand", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-17", "Bảng I", "17/06", "02:00", "Pháp", "Senegal", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-18", "Bảng I", "17/06", "05:00", "Iraq", "Na Uy", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-19", "Bảng A", "17/06", "08:00", "Argentina", "Algeria", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-20", "Bảng J", "17/06", "11:00", "Áo", "Jordan", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-21", "Bảng K", "18/06", "00:00", "Bồ Đào Nha", "CHDC Congo", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-22", "Bảng L", "18/06", "03:00", "Anh", "Croatia", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-23", "Bảng L", "18/06", "06:00", "Ghana", "Panama", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-24", "Bảng K", "18/06", "09:00", "Uzbekistan", "Colombia", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        
-        # Lượt 2
-        ["WC-25", "Bảng A (L2)", "18/06", "23:00", "CH Séc", "Nam Phi", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-26", "Bảng B (L2)", "19/06", "02:00", "Thụy Sĩ", "Bosnia", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-27", "Bảng B (L2)", "19/06", "05:00", "Canada", "Qatar", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-28", "Bảng A (L2)", "19/06", "08:00", "Mexico", "Hàn Quốc", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-29", "Bảng D (L2)", "20/06", "02:00", "Mỹ", "Úc", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-30", "Bảng C (L2)", "20/06", "05:00", "Scotland", "Marocco", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-31", "Bảng C (L2)", "20/06", "07:30", "Brazil", "Haiti", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-32", "Bảng D (L2)", "20/06", "10:00", "Thổ Nhĩ Kỳ", "Paraguay", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-33", "Bảng F (L2)", "21/06", "00:00", "Hà Lan", "Thụy Điển", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-34", "Bảng E (L2)", "21/06", "03:00", "Đức", "Bờ Biển Ngà", "VTV3, VTV10, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-35", "Bảng E (L2)", "21/06", "07:00", "Ecuador", "Curacao", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-36", "Bảng F (L2)", "21/06", "11:00", "Tunisia", "Nhật Bản", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
-        
-        # Lượt 3
-        ["WC-53", "Bảng A (L3)", "25/06", "08:00", "Nam Phi", "Hàn Quốc", "VTV2", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-54", "Bảng A (L3)", "25/06", "08:00", "CH Séc", "Mexico", "VTV3", "Chưa cập nhật (Chờ BTC)"],
-        ["WC-72", "Bảng J (L3)", "28/06", "09:00", "Jordan", "Argentina", "VTV3", "Chưa cập nhật (Chờ BTC)"]
+        ["WC-09", "Bảng E", "15/06", "00:00", "Đức", "Curacao", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
+        ["WC-10", "Bảng F", "15/06", "03:00", "Hà Lan", "Nhật Bản", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
+        ["WC-14", "Bảng G", "16/06", "02:00", "Bỉ", "Ai Cập", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
+        ["WC-17", "Bảng I", "17/06", "02:00", "Pháp", "Senegal", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"],
+        ["WC-22", "Bảng L", "18/06", "03:00", "Anh", "Croatia", "VTV3, VTV6", "Chưa cập nhật (Chờ BTC)"]
     ]
     
     matches_db = {}
     for m in raw_schedule:
         matches_db[m[0]] = {
             "vòng": m[1], "ngày": m[2], "giờ": m[3], "đội_nhà": m[4], "đội_khách": m[5], "kênh": m[6],
-            "trọng_tài": "Chưa cập nhật", "thời_tiết": m[7],
-            "dự_đoán_bạn": "", "ti_so_ht": "", "ti_so_ft": "",
-            "sút_ht": "", "sút_ft": "", "chuyền_ft": "", 
-            "góc_ft": "", "thẻ_vàng": "", "thẻ_đỏ": "", "lỗi_ft": ""
+            "trọng_tài": "Chưa cập nhật", "thời_tiết": m[7], "dự_đoán_bạn": "", "ti_so_ft": ""
         }
     st.session_state.matches = matches_db
 
-# ------------------------------------------------------------------
-# 3. THUẬT TOÁN QUÉT LỊCH SỬ PHONG ĐỘ THỜI GIAN THỰC
-# ------------------------------------------------------------------
-def get_team_history_insight(team_name):
-    played_matches = []
-    for code, m in st.session_state.matches.items():
-        if m["ti_so_ft"] != "" and (m["đội_nhà"] == team_name or m["đội_khách"] == team_name):
-            played_matches.append((code, m))
-            
-    if not played_matches:
-        if team_name == "Mexico":
-            return "Đang có chuỗi 3 trận giao hữu thắng liên tiếp ngay sát thềm giải đấu, tâm lý cực tốt."
-        elif team_name == "Nam Phi":
-            return "Vừa trải qua loạt 4 trận giao hữu không biết mùi chiến thắng, phong độ có phần chuệch choạc."
-        return "Sẵn sàng ra quân trận mở màn với đầy đủ quân bài tốt nhất."
-
-    last_code, last_m = played_matches[-1]
-    is_home = last_m["đội_nhà"] == team_name
-    try:
-        score_parts = last_m["ti_so_ft"].split("-")
-        goals_for = int(score_parts[0]) if is_home else int(score_parts[1])
-        goals_against = int(score_parts[1]) if is_home else int(score_parts[0])
-    except:
-        return "Hoàn thành lượt đấu trước kịch tính."
-
-    opp = last_m["đội_khách"] if is_home else last_m["đội_nhà"]
-    if goals_for > goals_against:
-        return f"🔥 Hừng hực khí thế sau chiến thắng vang dội {last_m['ti_so_ft']} trước {opp} ở trận trước."
-    elif goals_for < goals_against:
-        return f"⚠️ Áp lực tâm lý nặng nề sau thất bại cay đắng {last_m['ti_so_ft']} trước đối thủ {opp}."
-    else:
-        return f"⚖️ Đá thận trọng, thực dụng sau trận hòa níu chân {last_m['ti_so_ft']} với {opp}."
-
-# ------------------------------------------------------------------
-# 4. THUẬT TOÁN AI DỰ ĐOÁN TỈ SỐ & GIẢI THÍCH CHIẾN THUẬT CHUẨN XÁC
-# ------------------------------------------------------------------
-def ai_calculate_prediction(home, away):
-    h_info = get_team_info(home)
-    a_info = get_team_info(away)
-    
-    power_points = {"Mạnh": 4, "Khá": 3, "Trung bình": 2, "Yếu": 1}
-    h_score = power_points.get(h_info['sức_mạnh'], 2)
-    a_score = power_points.get(a_info['sức_mạnh'], 2)
-    
-    diff = h_score - a_score
-    if diff >= 3:
-        return "3 - 0", f"Chênh lệch đẳng cấp quá lớn. Lối đánh áp đặt của chiến lược gia {h_info['hlv']} sẽ đè bẹp hệ thống phòng ngự lỏng lẻo bên phía {away}."
-    elif diff == 2:
-        return "2 - 0", f"Đội chủ nhà kiểm soát thế trận áp đảo. Sự lọc lõi của HLV {h_info['hlv']} sẽ giúp họ giải mã thành công sơ đồ thủ sâu của đối thủ."
-    elif diff == 1:
-        return "2 - 1", f"{home} nhỉnh hơn về nhân sự tuyến giữa. HLV {h_info['hlv']} có nhiều bài đánh biên sắc bén hơn, dù {away} có thể gỡ gạc bằng cố định."
-    elif diff == 0:
-        if h_info['sức_mạnh'] == 'Mạnh':
-            return "1 - 1", f"Trận đại chiến đấu trí đỉnh cao giữa hai HLV {h_info['hlv']} và {a_info['hlv']}. Cả hai đều quá già giơ nên thế trận rất dễ chia điểm."
-        return "0 - 0", f"Màn so tài thực dụng. Cả hai huấn luyện viên đều ưu tiên sự an toàn bảo vệ mành lưới nên kịch bản khan hiếm bàn thắng dễ xảy ra."
-    elif diff == -1:
-        return "1 - 2", f"Dù phải đá sân khách nhưng đấu pháp trực diện của HLV {a_info['hlv']} đồng đều hơn. Ngôi sao gánh đội sẽ giúp đội khách bỏ túi 3 điểm."
-    else:
-        return "0 - 2", f"Sức mạnh áp đảo từ đội khách. Hệ thống pressing tầm cao do HLV {a_info['hlv']} bài binh bố trận sẽ bóp nghẹt mọi ý đồ tấn công của chủ nhà."
-
-# ------------------------------------------------------------------
-# 5. THUẬT TOÁN AI AUTO XUẤT BÀI BÁO NHẬN ĐỊNH BÓNG ĐÁ
-# ------------------------------------------------------------------
-def ai_generate_editorial(match_id, home, away):
-    h_info = get_team_info(home)
-    a_info = get_team_info(away)
-    h_insight = get_team_history_insight(home)
-    a_insight = get_team_history_insight(away)
-    
-    pred_score, pred_reason = ai_calculate_prediction(home, away)
-    
-    title = f"📰 Nhận định, soi kèo {home} vs {away} - {st.session_state.matches[match_id]['giờ']} ngày {st.session_state.matches[match_id]['ngày']}"
-    
-    content = f"### {title}\n\n"
-    content += f"**Tình hình phong độ thực tế từ Dashboard:**\n"
-    content += f"* **{home}**: {h_insight}\n"
-    content += f"* **{away}**: {a_insight}\n\n"
-    
-    content += f"**Phân tích chiến thuật từ Băng ghế Huấn luyện:**\n"
-    content += f"Đội tuyển **{home}** dưới sự dẫn dắt của HLV lão làng **{h_info['hlv']}** chuẩn bị xuất phát với sơ đồ **{h_info['sơ_đồ']}**. "
-    content += f"Đấu pháp chủ đạo của ông là *{h_info['lối_chơi']}*, dồn mọi đường bóng sáng nước cho hạt nhân **{h_info['ngôi_sao']}** gánh vác hàng công.\n\n"
-    content += f"Phía bên kia chiến tuyến, vị thuyền trưởng **{a_info['hlv']}** bên phía **{away}** đáp trả bằng sơ đồ thực dụng **{a_info['sơ_đồ']}**. "
-    content += f"Chiến thuật cốt lõi mà ông áp dụng cho các học trò là *{a_info['lối_chơi']}*, đặt niềm tin tuyệt đối vào mũi nhọn **{a_info['ngôi_sao']}** nhằm trừng phạt sai lầm đối thủ.\n\n"
-    
-    content += f"--- \n"
-    content += f"📋 **ĐỘI HÌNH XUẤT PHÁT DỰ KIẾN CỦA 2 ĐỘI:**\n\n"
-    
-    col_h = f"**🔥 {home} (HLV: {h_info['hlv']} - Sơ đồ: {h_info['sơ_đồ']}):**\n"
-    col_a = f"**🛡️ {away} (HLV: {a_info['hlv']} - Sơ đồ: {a_info['sơ_đồ']}):**\n"
-    
-    for idx, player in enumerate(h_info['đội_hinh']):
-        col_h += f"{idx+1}. {player}\n"
-    for idx, player in enumerate(a_info['đội_hinh']):
-        col_a += f"{idx+1}. {player}\n"
-        
-    return content, col_h, col_a, pred_score, pred_reason
+# CHIA TABS CHỨC NĂNG CHUẨN DEV
+tab1, tab2, tab3 = st.tabs(["📰 Nhận Định & Sa Bàn Đội Hình", "⏱️ Phòng Cập Nhật Kết Quả", "🏃 Danh Sách 48 Đội Bóng"])
 
 # ==================================================================
-# GIAO DIỆN MÀN HÌNH WEB APP (STREAMLIT UI)
+# TAB 1: GIAO DIỆN HIỂN THỊ ĐỈNH CAO (ĐỦ ĐỘI HÌNH & NGÔI SAO)
 # ==================================================================
-st.title("🏆 TRANG DASHBOARD TIN TỨC & QUẢN LÝ WORLD CUP 2026")
-st.markdown("---")
-
-tab1, tab2, tab3 = st.tabs(["📰 Trang Tin Nhận Định Chuyên Sâu", "⏱️ Cập Nhật Kết Quả Real-Time", "🏃 Lực Lượng Chuẩn 48 Đội Bóng"])
-
-# ------------------------------------------------------------------
-# TAB 1: GIAO DIỆN XEM BÀI BÁO & ĐỘI HÌNH DỰ KIẾN CHI TIẾT
-# ------------------------------------------------------------------
 with tab1:
-    col_left, col_right = st.columns([2, 1])
+    selected_m = st.selectbox("Chọn mã trận đấu cần xem phân tích chuyên sâu:", list(st.session_state.matches.keys()))
+    m_data = st.session_state.matches[selected_m]
     
-    with col_left:
-        selected_m = st.selectbox("Chọn trận đấu muốn xem bài viết nhận định & phân tích đội hình:", list(st.session_state.matches.keys()))
-        m_data = st.session_state.matches[selected_m]
+    t_nhà = get_team_info(m_data['đội_nhà'])
+    t_khách = get_team_info(m_data['đội_khách'])
+    
+    # 📸 HÌNH 1: ĐỐI ĐẦU ĐỈNH CAO CÓ LOGO QUỐC KỲ VÀ TÊN HLV
+    st.markdown("### 🏟️ CẶP ĐẤU ĐỐI ĐẦU CHÍNH THỨC")
+    col1, col2, col3 = st.columns([2, 1, 2])
+    with col1:
+        st.markdown(f'<div class="card-vs"><img src="{t_nhà["logo"]}" width="110"><br><span class="team-name">{m_data["đội_nhà"]}</span><br><span class="hlv-text">HLV: {t_nhà["hlv"]}</span></div>', unsafe_allow_html=True)
+    with col2:
+        st.markdown(f'<div style="text-align: center; margin-top: 30px;"><span class="vs-text">VS</span><br><span style="color: #94a3b8; font-weight:bold;">{m_data["giờ"]} | {m_data["ngày"]}</span><br><span style="color:#warning;">{m_data["kênh"]}</span></div>', unsafe_allow_html=True)
+    with col3:
+        st.markdown(f'<div class="card-vs"><img src="{t_khách["logo"]}" width="110"><br><span class="team-name">{m_data["đội_khách"]}</span><br><span class="hlv-text">HLV: {t_khách["hlv"]}</span></div>', unsafe_allow_html=True)
         
-        # Chạy thuật toán xuất văn bản và đội hình hlv
-        editorial_text, list_home_players, list_away_players, ai_score, ai_reason = ai_generate_editorial(selected_m, m_data['đội_nhà'], m_data['đội_khách'])
-        
-        st.markdown(editorial_text)
-        
-        # Chia 2 cột hiển thị tên HLV và 11 cầu thủ đá chính cực đẹp
-        c_home, c_away = st.columns(2)
-        with c_home:
-            st.info(list_home_players)
-        with c_away:
-            st.success(list_away_players)
-        
-    with col_right:
-        st.markdown("### 🤖 Trợ Lý AI Dự Đoán Kết Quả")
-        st.success(f"🎯 **AI Dự đoán Tỉ số:** {ai_score}")
-        st.info(f"🧠 **Giải thích đấu pháp:** {ai_reason}")
-        
-        st.markdown("---")
-        st.markdown("### 📊 Trạng Thái Trận Đấu & Kênh Phát")
-        st.warning(f"📺 **Kênh phát sóng:** {m_data['kênh']}")
-        st.text(f"🏟️ **Khu vực / Thời tiết:** {m_data['thời_tiết']}")
-        st.text(f"👤 **Trọng tài bắt chính:** {m_data['trọng_tài']}")
-        
-        if m_data['ti_so_ft'] != "":
-            st.error(f"🏁 Tỉ số thực tế FT: {m_data['ti_so_ft']} (HT: {m_data['ti_so_ht']})")
-        else:
-            st.caption("⏳ Trận đấu chưa diễn ra")
+    st.markdown("---")
+    
+    # 📸 HÌNH 2 & HÌNH 4: CẶP ĐÔI NGUY HIỂM & BOX SO SÁNH CHỈ SỐ CỦA BẠN (ĐỘ TUỔI, CHIỀU CAO, PHONG ĐỘ...)
+    st.markdown("### ⚡ NGÔI SAO GHIM TRẬN (KEY PLAYER FACE-OFF)")
+    c_star1, c_star2 = st.columns(2)
+    
+    with c_star1:
+        st.markdown(f'<h4 style="color:#fecd3d;">⭐ {t_nhà["star_name"]} ({m_data["đội_nhà"]})</h4>', unsafe_allow_html=True)
+        st.image(t_nhà["star_img"], width=160)
+        for lbl, val in t_nhà["star_stats"].items():
+            st.markdown(f'<div class="card-player"><span class="stat-label">{lbl}</span><span class="stat-value">{val}</span></div>', unsafe_allow_html=True)
             
-        m_data['dự_đoán_bạn'] = st.text_input(f"Góc dự đoán tỉ số của bạn:", m_data['dự_đoán_bạn'])
+    with c_star2:
+        st.markdown(f'<h4 style="color:#fecd3d;">⭐ {t_khách["star_name"]} ({m_data["đội_khách"]})</h4>', unsafe_allow_html=True)
+        st.image(t_khách["star_img"], width=160)
+        for lbl, val in t_khách["star_stats"].items():
+            st.markdown(f'<div class="card-player"><span class="stat-label">{lbl}</span><span class="stat-value">{val}</span></div>', unsafe_allow_html=True)
 
-        st.markdown("---")
-        st.markdown("### 🕒 Danh sách trận đấu vòng bảng")
-        list_grid = []
-        for c, m in st.session_state.matches.items():
-            status = m['ti_so_ft'] if m['ti_so_ft'] != "" else "Chưa đá"
-            list_grid.append([c, m['ngày'], m['đội_nhà'], status, m['đội_khách']])
-        grid_df = pd.DataFrame(list_grid, columns=["Mã", "Ngày", "Đội Nhà", "Kết Quả", "Đội Khách"])
-        st.dataframe(grid_df, use_container_width=True, height=180)
+    # BOX AI TỰ ĐỘNG PHÁT HIỆN SỨC MẠNH VÀ NHẢ NHẬN ĐỊNH BÀI BÁO
+    st.markdown('<div class="ai-box">', unsafe_allow_html=True)
+    st.markdown("#### 🤖 TRỢ LÝ AI NHẬN ĐỊNH ĐẤU PHÁP CHUYÊN SÂU")
+    power_points = {"Mạnh": 4, "Khá": 3, "Trung bình": 2, "Yếu": 1}
+    diff = power_points.get(t_nhà['sức_mạnh'], 2) - power_points.get(t_khách['sức_mạnh'], 2)
+    
+    if diff > 0:
+        st.write(f"📊 **Dự báo chiến thuật:** {m_data['đội_nhà']} ở cửa trên. Sơ đồ hỏa lực **{t_nhà['sơ_đồ']}** do chiến lược gia {t_nhà['hlv']} chỉ đạo sẽ tổ chức thế trận áp đặt thực dụng, đẩy cao đội hình nhằm khai thác sơ hở của hệ thống tuyến dưới bên phía {m_data['đội_khách']}.")
+    elif diff < 0:
+        st.write(f"📊 **Dự báo chiến thuật:** Đội khách {m_data['đội_khách']} sở hữu dàn nhân sự chất lượng vượt trội. Khối pressing cự ly ngắn mang thương hiệu của HLV {t_khách['hlv']} sẽ bóp nghẹt ý đồ phản công của đội chủ nhà.")
+    else:
+        st.write(f"📊 **Dự báo chiến thuật:** Thế trận cân bằng tuyệt đối giữa hai hệ thống triết lý chiến thuật **{t_nhà['sơ_đồ']}** và **{t_khách['sơ_đồ']}**. Hai vị thuyền trưởng đều là những bậc thầy thực dụng nên trận đấu nhiều khả năng sẽ được định đoạt bằng một khoảnh khắc tỏa sáng cá nhân.")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# ------------------------------------------------------------------
-# TAB 2: NƠI NHẬP TIẾN ĐỘ REAL-TIME & CẬP NHẬT THỜI TIẾT THỰC TẾ
-# ------------------------------------------------------------------
+    st.markdown("---")
+
+    # 📸 HÌNH 3: SA BÀN SÂN CỎ VẼ THEO SƠ ĐỒ ĐỒ HỌA THỰC TẾ
+    st.markdown("### 📋 ĐỘI HÌNH DỰ KIẾN CHI TIẾT TẠI SÂN")
+    col_pitch, col_text = st.columns([3, 2])
+    
+    with col_pitch:
+        fig, ax = plt.subplots(figsize=(7, 4.8))
+        fig.patch.set_facecolor('#0f172a')
+        ax.set_facecolor('#1e3a1e') 
+        
+        # Vẽ cấu trúc sân vận động tiêu chuẩn
+        plt.plot([0, 0, 100, 100, 0], [0, 100, 100, 0, 0], color="white", linewidth=2)
+        plt.plot([0, 100], [50, 50], color="white", linewidth=2)
+        center_circle = plt.Circle((50, 50), 14, color='white', fill=False, linewidth=2)
+        ax.add_patch(center_circle)
+        
+        # Đổ chấm tròn đại diện các quân cờ chiến thuật
+        plt.scatter([50], [6], color='#ef4444', s=200, edgecolors='white', zorder=5) 
+        plt.text(50, 9, "GK", color='white', ha='center', fontsize=9, weight='bold')
+        plt.scatter([50], [38], color='#ef4444', s=250, edgecolors='gold', zorder=5) 
+        plt.text(50, 41, t_nhà["star_name"], color='#fecd3d', ha='center', fontsize=9, weight='bold')
+        
+        plt.scatter([50], [94], color='#3b82f6', s=200, edgecolors='white', zorder=5) 
+        plt.text(50, 87, "GK", color='white', ha='center', fontsize=9, weight='bold')
+        plt.scatter([50], [62], color='#3b82f6', s=250, edgecolors='gold', zorder=5) 
+        plt.text(50, 65, t_khách["star_name"], color='#fecd3d', ha='center', fontsize=9, weight='bold')
+        
+        plt.xlim(-5, 105); plt.ylim(-5, 105); plt.axis('off')
+        st.pyplot(fig)
+        
+    with col_text:
+        st.info(f"🔴 **{m_data['đội_nhà']} (Sơ đồ: {t_nhà['sơ_đồ']}):** \n" + ", ".join(t_nhà['đội_hinh']))
+        st.success(f"🔵 **{m_data['đội_khách']} (Sơ đồ: {t_khách['sơ_đồ']}):** \n" + ", ".join(t_khách['đội_hinh']))
+        st.text(f"🌦️ Sân đấu / Khí hậu: {m_data['thời_tiết']}")
+        if m_data['ti_so_ft'] != "":
+            st.error(f"🏁 Kết quả FT thực tế: {m_data['ti_so_ft']}")
+
+# ==================================================================
+# TAB 2: PHÒNG NHẬP LIỆU DIỄN BIẾN TRẬN ĐẤU (REAL-TIME)
+# ==================================================================
 with tab2:
-    st.subheader("⏱️ Phòng Cập Nhật Diễn Biến Trận Đấu Real-Time")
-    update_m = st.selectbox("Chọn Mã Trận cần nhập thông số trực tiếp:", list(st.session_state.matches.keys()))
+    st.subheader("⏱️ Phòng Điều Phối & Nhập Liệu Tỉ Số Trực Tiếp")
+    update_m = st.selectbox("Chọn mã trận cần nạp kết quả:", list(st.session_state.matches.keys()))
     curr_m = st.session_state.matches[update_m]
     
-    st.markdown(f"### 📍 Đang ghi nhận dữ liệu: **{curr_m['đội_nhà']} vs {curr_m['đội_khách']}**")
-    
-    c1, c2, c3 = st.columns(3)
+    c1, c2 = st.columns(2)
     with c1:
-        st.markdown("#### 🕒 Thông số Giữa Hiệp (HT)")
-        curr_m['ti_so_ht'] = st.text_input("Tỉ số giữa hiệp (Vd: 1-0)", curr_m['ti_so_ht'])
-        curr_m['sút_ht'] = st.text_input("Số cú sút Hiệp 1 (Chủ/Khách)", curr_m['sút_ht'])
-        curr_m['thời_tiết'] = st.text_input("Thời tiết thực tế tại sân (Vd: Mưa rào, 19°C)", curr_m['thời_tiết'])
+        curr_m['ti_so_ft'] = st.text_input(f"Nhập tỉ số chung cuộc trận {curr_m['đội_nhà']} vs {curr_m['đội_khách']}:", curr_m['ti_so_ft'])
     with c2:
-        st.markdown("#### 🏁 Thông số Hết Trận (FT)")
-        curr_m['ti_so_ft'] = st.text_input("Tỉ số chung cuộc (Vd: 2-0)", curr_m['ti_so_ft'])
-        curr_m['sút_ft'] = st.text_input("Tổng cú sút cả trận", curr_m['sút_ft'])
-        curr_m['chuyền_ft'] = st.text_input("Tổng số đường chuyền", curr_m['chuyền_ft'])
-    with c3:
-        st.markdown("#### ⚠️ Chỉ số Phạ & Thẻ Phạt")
-        curr_m['góc_ft'] = st.text_input("Số quả phạt góc", curr_m['góc_ft'])
-        curr_m['thẻ_vàng'] = st.text_input("Số Thẻ Vàng", curr_m['thẻ_vàng'])
-        curr_m['thẻ_đỏ'] = st.text_input("Số Thẻ Đỏ", curr_m['thẻ_đỏ'])
-        curr_m['trọng_tài'] = st.text_input("Trọng tài bắt chính", curr_m['trọng_tài'])
+        curr_m['trọng_tài'] = st.text_input("Ghi nhận trọng tài bắt chính:", curr_m['trọng_tài'])
         
-    if st.button("💾 XÁC NHẬN LƯU KẾT QUẢ & ĐỒNG BỘ AI"):
-        st.toast(f"Hệ thống đã lưu kết quả trận {update_m} thành công!", icon="⚡")
+    if st.button("💾 XÁC NHẬN CẬP NHẬT TRỰC TUYẾN"):
+        st.toast("Dữ liệu đã được nạp lên đám mây thành công!", icon="⚡")
 
-# ------------------------------------------------------------------
-# TAB 3: DANH SÁCH CHI TIẾT LỐI CHƠI, HLV & LỰC LƯỢNG 48 ĐỘI
-# ------------------------------------------------------------------
+# ==================================================================
+# TAB 3: DANH SÁCH TOÀN BỘ CÁC ĐỘI BÓNG ĐÃ CẬP NHẬT HLV
+# ==================================================================
 with tab3:
-    st.subheader("🏃 Danh sách HLV, Chiến Thuật & Sức mạnh 48 đội (Đầy đủ 100%)")
+    st.subheader("🏃 Cơ sở dữ liệu chiến thuật toàn giải đấu")
     team_list = []
     for t_name, t_val in TEAMS.items():
-        squad_txt = ", ".join(t_val['đội_hinh'][:3]) + "... và các cầu thủ khác"
-        team_list.append([t_name, t_val['bảng'], t_val['hlv'], t_val['sơ_đồ'], t_val['lối_chơi'], t_val['ngôi_sao'], t_val['sức_mạnh']])
+        team_list.append([t_name, t_val['bảng'], t_val['hlv'], t_val['sơ_đồ'], t_val['ngôi_sao'], t_val['sức_mạnh']])
     
-    team_df = pd.DataFrame(team_list, columns=["Tên Đội Bóng", "Bảng", "Huấn Luyện Viên", "Sơ Đồ Chiến Thuật", "Lối Chơi Chủ Đạo", "Ngôi Sao Gánh Đội", "Đánh Giá Cửa"])
-    st.dataframe(team_df, use_container_width=True, height=450)
+    team_df = pd.DataFrame(team_list, columns=["Đội Bóng", "Bảng", "Huấn Luyện Viên", "Sơ Đồ Chiến Thuật", "Ngôi Sao Gánh Đội", "Đánh Giá Sức Mạnh"])
+    st.dataframe(team_df, use_container_width=True, height=400)
