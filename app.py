@@ -4,7 +4,7 @@ import pandas as pd
 # ==================================================================
 # 1. HỆ THỐNG ĐỒ HỌA PREMIUM HIGH-CONTRAST (TƯƠNG PHẢN SIÊU SÁNG 4K)
 # ==================================================================
-st.set_page_config(page_title="World Cup 2026 - Realtime AI Dashboard", layout="wide")
+st.set_page_config(page_title="World Cup 2026", layout="wide")
 
 # Hệ thống CSS Premium ép độ tương phản cao, cam đoan chữ sáng rõ mồm một trên điện thoại
 st.markdown("""
