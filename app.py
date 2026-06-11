@@ -101,8 +101,6 @@ st.markdown("""
     .ai-box { background: rgba(16, 185, 129, 0.18); border-left: 6px solid #10b981; border-radius: 8px; padding: 20px; margin-top: 15px; }
     .lineup-home-box { background: rgba(239, 68, 68, 0.15); border-left: 6px solid #ef4444; padding: 18px; border-radius: 8px; margin-bottom: 15px; }
     .lineup-away-box { background: rgba(59, 130, 246, 0.15); border-left: 6px solid #3b82f6; padding: 18px; border-radius: 8px; margin-bottom: 15px; }
-    .bracket-node { background: #0b1329; border: 1px solid #ffd700; padding: 10px; border-radius: 6px; margin: 5px 0; text-align: left; }
-    .bracket-prob { color: #ffd700; font-weight: bold; float: right; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -152,7 +150,7 @@ def get_teams_data():
         "Thổ Nhĩ Kỳ": {"bảng": "D", "sơ_đồ": "4-2-3-1", "lối_chơi": "Kỷ luật, đá cống hiến, tấn công trung lộ rất mạnh", "ngôi_sao": "Arda Güler", "sức_mạnh": "Khá", "hlv": "V. Montella", "logo": "https://flagcdn.com/w80/tr.png", "star_stats": {"Độ tuổi": "21 tuổi", "Vị trí": "Tiền vệ công", "Chiều cao": "1m75", "CLB": "Real Madrid", "Phong độ": "🔥 8.6/10"}, "đội_hinh": ["M. Günok", "Z. Çelik", "S. Akaydin", "A. Bardakcı", "F. Kadıoğlu", "H. Çalhanoğlu", "S. Özcan", "C. Ünder", "Arda Güler", "K. Aktürkoğlu", "B. Yılmaz"]},
 
         # Bảng E
-        "Đức": {"bảng": "E", "sơ_đồ": "4-2-3-1", "lối_chơi": "Kiểm soát thế trận, pressing tầm cao, ban bật ngắn", "ngôi_sao": "Jamal Musiala", "sức_mạnh": "Mạnh", "hlv": "Julian Nagelsmann", "logo": "https://flagcdn.com/w80/de.png", "star_stats": {"Độ tuổi": "23 tuổi", "Vị trí": "Tiền vệ hộ công", "Chiều cao": "1m84", "CLB": "Bayern", "Phong độ": "🔥 9.3/10"}, "đội_hinh": ["M. Neuer", "J. Kimmich", "J. Tah", "A. Rüdiger", "M. Mittelstädt", "R. Andrich", "TROOS", "Jamal Musiala", "I. Gündogan", "F. Wirtz", "Kai Havertz"]},
+        "Đức": {"bảng": "E", "sơ_đồ": "4-2-3-1", "lối_chơi": "Kiểm soát thế trận, pressing tầm cao, ban bật ngắn", "ngôi_sao": "Jamal Musiala", "sức_mạnh": "Mạnh", "hlv": "Julian Nagelsmann", "logo": "https://flagcdn.com/w80/de.png", "star_stats": {"Độ tuổi": "23 tuổi", "Vị trí": "Tiền vệ hộ công", "Chiều cao": "1m84", "CLB": "Bayern", "Phong độ": "🔥 9.3/10"}, "đội_hinh": ["M. Neuer", "J. Kimmich", "J. Tah", "A. Rüdiger", "M. Mittelstädt", "R. Andrich", "T. Kroos", "Jamal Musiala", "I. Gündogan", "F. Wirtz", "Kai Havertz"]},
         "Curaçao": {"bảng": "E", "sơ_đồ": "4-4-2", "lối_chơi": "Phòng ngự số đông, phản công bứt tốc biên", "ngôi_sao": "Juninho Bacuna", "sức_mạnh": "Yếu", "hlv": "Dick Advocaat", "logo": "https://flagcdn.com/w80/cw.png", "star_stats": {"Độ tuổi": "28 tuổi", "Vị trí": "Tiền vệ trung tâm", "Chiều cao": "1m78", "CLB": "Al-Wahda", "Phong độ": "⭐ 6.5/10"}, "đội_hinh": ["E. Room", "J. Gaari", "R. van Eijma", "C. Martina", "S. Floranus", "B. Kuwas", "V. Anita", "L. Bacuna", "K. Gorré", "R. Janga", "J. Bacuna"]},
         "Bờ Biển Ngà": {"bảng": "E", "sơ_đồ": "4-3-3", "lối_chơi": "Cậy nhờ thể lực, giàu tốc độ, đá trực diện", "ngôi_sao": "Franck Kessié", "sức_mạnh": "Trung bình", "hlv": "Emerse Faé", "logo": "https://flagcdn.com/w80/ci.png", "star_stats": {"Độ tuổi": "29 tuổi", "Vị trí": "Tiền vệ", "Chiều cao": "1m83", "CLB": "Al-Ahli", "Phong độ": "⭐ 7.9/10"}, "đội_hinh": ["Y. Fofana", "W. Singo", "O. Diomande", "E. Ndicka", "G. Konan", "F. Kessié", "J. Seri", "S. Fofana", "M. Gradel", "S. Adingra", "S. Haller"]},
         "Ecuador": {"bảng": "E", "sơ_đồ": "3-4-3", "lối_chơi": "Đá rực lửa, pressing mạnh ở biên, giàu thể lực", "ngôi_sao": "Moisés Caicedo", "sức_mạnh": "Khá", "hlv": "S. Beccacece", "logo": "https://flagcdn.com/w80/ec.png", "star_stats": {"Độ tuổi": "24 tuổi", "Vị trí": "Tiền vệ trung tâm", "Chiều cao": "1m78", "CLB": "Chelsea", "Phong độ": "🔥 8.5/10"}, "đội_hinh": ["A. Domínguez", "F. Torres", "W. Pacho", "P. Hincapié", "A. Preciado", "M. Caicedo", "A. Franco", "P. Estupiñán", "K. Páez", "J. Sarmiento", "E. Valencia"]},
@@ -164,7 +162,7 @@ def get_teams_data():
         "Tunisia": {"bảng": "F", "sơ_đồ": "4-5-1", "lối_chơi": "Phòng ngự kỷ luật, phá lối chơi đối phương", "ngôi_sao": "Ellyes Skhiri", "sức_mạnh": "Trung bình", "hlv": "Faouzi Benzarti", "logo": "https://flagcdn.com/w80/tn.png", "star_stats": {"Độ tuổi": "31 tuổi", "Vị trí": "Tiền vệ trung tâm", "Chiều cao": "1m85", "CLB": "Frankfurt", "Phong độ": "⭐ 7.4/10"}, "đội_hinh": ["B. Saïd", "W. Kechrida", "D. Bronn", "M. Talbi", "A. Abdi", "E. Skhiri", "A. Laïdouni", "A. Slimane", "H. Rafia", "S. Ltaief", "Y. Msakni"]},
 
         # Bảng G
-        "Bỉ": {"bảng": "G", "sơ_đồ": "4-3-3", "lối_chơi": "Tấn công trung lộ, ban bật nhanh tiền vệ sáng tạo", "ngôi_sao": "Kevin De Bruyne", "sức_mạnh": "Mạnh", "hlv": "Domenico Tedesco", "logo": "https://flagcdn.com/w80/be.png", "star_stats": {"Độ tuổi": "34 tuổi", "Vị trí": "Tiền vệ", "Chiều cao": "1m81", "CLB": "Man City", "Phong độ": "🔥 9.2/10"}, "đội_hinh": ["K. Casteels", "T. Castagne", "W. Faes", "Jan Vertonghen", "A. Theate", "O. Mangala", "A. Onana", "Kevin De Bruyne", "J. Doku", "L. Trossard", "R. Lukaku"]},
+        "Bỉ": {"bảng": "G", "sơ_đồ": "4-3-3", "lối_chơi": "Tấn công trung lộ, ban bật nhanh tiền vệ sáng tạo", "ngôi_sao": "Kevin De Bruyne", "sức_mạnh": "Mạnh", "hlv": "Domenico Tedesco", "logo": "https://flagcdn.com/w80/be.png", "star_stats": {"Độ tuổi": "34 tuổi", "Vị trí": "Tiền vệ kiến thiết", "Chiều cao": "1m81", "CLB": "Man City", "Phong độ": "🔥 9.2/10"}, "đội_hinh": ["K. Casteels", "T. Castagne", "W. Faes", "Jan Vertonghen", "A. Theate", "O. Mangala", "A. Onana", "Kevin De Bruyne", "J. Doku", "L. Trossard", "R. Lukaku"]},
         "Ai Cập": {"bảng": "G", "sơ_đồ": "4-3-3", "lối_chơi": "Phòng ngự chặt, dồn bóng cho ngôi sao bứt tốc", "ngôi_sao": "Mohamed Salah", "sức_mạnh": "Khá", "hlv": "Hossam Hassan", "logo": "https://flagcdn.com/w80/eg.png", "star_stats": {"Độ tuổi": "33 tuổi", "Vị trí": "Tiền đạo cánh", "Chiều cao": "1m75", "CLB": "Liverpool", "Phong độ": "🔥 9.0/10"}, "đội_hinh": ["M. El Shenawy", "M. Hany", "M. Abdelmonem", "Y. Ibrahim", "A. Maâloul", "M. Attia", "M. Elneny", "H. Fathi", "Mohamed Salah", "Trézéguet", "M. Mohamed"]},
         "Iran": {"bảng": "G", "sơ_đồ": "4-4-2", "lối_chơi": "Khối phòng ngự lùi sâu vững chãi, phản công nhanh", "ngôi_sao": "Mehdi Taremi", "sức_mạnh": "Khá", "hlv": "Amir Ghalenoei", "logo": "https://flagcdn.com/w80/ir.png", "star_stats": {"Độ tuổi": "33 tuổi", "Vị trí": "Tiền đạo", "Chiều cao": "1m87", "CLB": "Inter Milan", "Phong độ": "⭐ 8.1/10"}, "đội_hinh": ["A. Beiranvand", "R. Rezaeian", "H. Kanaanizadegan", "S. Khalilzadeh", "M. Mohammadi", "S. Ghoddos", "S. Ezatolahi", "A. Jahanbakhsh", "M. Torabi", "S. Azmoun", "Mehdi Taremi"]},
         "New Zealand": {"bảng": "G", "sơ_đồ": "4-4-2", "lối_chơi": "Bóng bổng, dựa vào thể hình tranh chấp mạnh", "ngôi_sao": "Chris Wood", "sức_mạnh": "Yếu", "hlv": "Darren Bazeley", "logo": "https://flagcdn.com/w80/nz.png", "star_stats": {"Độ tuổi": "34 tuổi", "Vị trí": "Tiền đạo cắm", "Chiều cao": "1m91", "CLB": "Nottingham", "Phong độ": "⭐ 7.2/10"}, "đội_hinh": ["O. Sail", "T. Payne", "M. Boxall", "N. Pijnaker", "L. Cacace", "Joe Bell", "M. Garbett", "S. Singh", "Ben Old", "K. Barbarouses", "Chris Wood"]},
@@ -201,126 +199,7 @@ def get_teams_data():
 
 TEAMS = get_teams_data()
 
-def get_team_info(name):
-    return TEAMS.get(name, {
-        "bảng": "Vòng bảng", "sơ_đồ": "4-3-3", "lối_chơi": "Tấn công tổng lực", "ngôi_sao": "Đội trưởng", "sức_mạnh": "Trung bình", "hlv": "Chưa cập nhật",
-        "logo": "https://flagcdn.com/w80/un.png",
-        "star_stats": {"Độ tuổi": "Chưa rõ", "Vị trí": "Chưa rõ", "Chiều cao": "Chưa rõ", "CLB": "Chưa rõ", "Phong độ": "⭐ 7.0/10"},
-        "đội_hinh": ["Cầu thủ số 1", "Cầu thủ số 2", "Cầu thủ số 3", "Cầu thủ số 4", "Cầu thủ số 5", "Cầu thủ số 6", "Cầu thủ số 7", "Cầu thủ số 8", "Cầu thủ số 9", "Cầu thủ số 10", "Cầu thủ số 11"]
-    })
-
-# KHỞI TẠO ĐẦY ĐỦ TOÀN BỘ 100% LỊCH THI ĐẤU KHỔNG LỒ MÀ BẠN GỬI
-if 'matches' not in st.session_state:
-    raw_schedule = [
-        # Lượt 1 Vòng Bảng
-        ["WC-01", "Bảng A", "12/06", "02:00", "Mexico", "Nam Phi", "VTV3, VTV10", "Mát mẻ, 24°C (Sân Azteca)"],
-        ["WC-02", "Bảng A", "12/06", "09:00", "Hàn Quốc", "CH Séc", "VTV3", "Chưa cập nhật"],
-        ["WC-03", "Bảng B", "13/06", "02:00", "Canada", "Bosnia & Herzegovina", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-04", "Bảng D", "13/06", "08:00", "Mỹ", "Paraguay", "VTV3", "Chưa cập nhật"],
-        ["WC-05", "Bảng B", "14/06", "02:00", "Qatar", "Thụy Sĩ", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-06", "Bảng C", "14/06", "05:00", "Brazil", "Morocco", "VTV3", "Chưa cập nhật"],
-        ["WC-07", "Bảng C", "14/06", "08:00", "Haiti", "Scotland", "VTV3", "Chưa cập nhật"],
-        ["WC-08", "Bảng D", "14/06", "11:00", "Australia", "Thổ Nhĩ Kỳ", "VTV3", "Chưa cập nhật"],
-        ["WC-09", "Bảng E", "15/06", "00:00", "Đức", "Curaçao", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-10", "Bảng F", "15/06", "03:00", "Hà Lan", "Nhật Bản", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-11", "Bảng E", "15/06", "06:00", "Bờ Biển Ngà", "Ecuador", "VTV3", "Chưa cập nhật"],
-        ["WC-12", "Bảng F", "15/06", "09:00", "Thụy Điển", "Tunisia", "VTV3", "Chưa cập nhật"],
-        ["WC-13", "Bảng H", "15/06", "23:00", "Tây Ban Nha", "Cape Verde", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-14", "Bảng G", "16/06", "02:00", "Bỉ", "Ai Cập", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-15", "Bảng H", "16/06", "05:00", "Saudi Arabia", "Uruguay", "VTV3", "Chưa cập nhật"],
-        ["WC-16", "Bảng G", "16/06", "08:00", "Iran", "New Zealand", "VTV3", "Chưa cập nhật"],
-        ["WC-17", "Bảng I", "17/06", "02:00", "Pháp", "Senegal", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-18", "Bảng I", "17/06", "05:00", "Iraq", "Na Uy", "VTV3", "Chưa cập nhật"],
-        ["WC-19", "Bảng J", "17/06", "08:00", "Argentina", "Algeria", "VTV3", "Chưa cập nhật"],
-        ["WC-20", "Bảng J", "17/06", "11:00", "Áo", "Jordan", "VTV3", "Chưa cập nhật"],
-        ["WC-21", "Bảng K", "18/06", "00:00", "Bồ Đào Nha", "CHDC Congo", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-22", "Bảng L", "18/06", "03:00", "Anh", "Croatia", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-23", "Bảng L", "18/06", "06:00", "Ghana", "Panama", "VTV3", "Chưa cập nhật"],
-        ["WC-24", "Bảng K", "18/06", "09:00", "Uzbekistan", "Colombia", "VTV3", "Chưa cập nhật"],
-        # Lượt 2 Vòng Bảng
-        ["WC-25", "Bảng A (L2)", "18/06", "23:00", "CH Séc", "Nam Phi", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-26", "Bảng B (L2)", "19/06", "02:00", "Thụy Sĩ", "Bosnia & Herzegovina", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-27", "Bảng B (L2)", "19/06", "05:00", "Canada", "Qatar", "VTV3", "Chưa cập nhật"],
-        ["WC-28", "Bảng A (L2)", "19/06", "08:00", "Mexico", "Hàn Quốc", "VTV3", "Chưa cập nhật"],
-        ["WC-29", "Bảng D (L2)", "20/06", "02:00", "Mỹ", "Australia", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-30", "Bảng C (L2)", "20/06", "05:00", "Scotland", "Morocco", "VTV3", "Chưa cập nhật"],
-        ["WC-31", "Bảng C (L2)", "20/06", "07:30", "Brazil", "Haiti", "VTV3", "Chưa cập nhật"],
-        ["WC-32", "Bảng D (L2)", "20/06", "10:00", "Thổ Nhĩ Kỳ", "Paraguay", "VTV3", "Chưa cập nhật"],
-        ["WC-33", "Bảng F (L2)", "21/06", "00:00", "Hà Lan", "Thụy Điển", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-34", "Bảng E (L2)", "21/06", "03:00", "Đức", "Bờ Biển Ngà", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-35", "Bảng E (L2)", "21/06", "07:00", "Ecuador", "Curaçao", "VTV3", "Chưa cập nhật"],
-        ["WC-36", "Bảng F (L2)", "21/06", "11:00", "Tunisia", "Nhật Bản", "VTV3", "Chưa cập nhật"],
-        ["WC-37", "Bảng H (L2)", "21/06", "23:00", "Tây Ban Nha", "Saudi Arabia", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-38", "Bảng G (L2)", "22/06", "02:00", "Bỉ", "Iran", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-39", "Bảng H (L2)", "22/06", "05:00", "Uruguay", "Cape Verde", "VTV3", "Chưa cập nhật"],
-        ["WC-40", "Bảng G (L2)", "22/06", "08:00", "New Zealand", "Ai Cập", "VTV3", "Chưa cập nhật"],
-        ["WC-41", "Bảng J (L2)", "23/06", "00:00", "Argentina", "Áo", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-42", "Bảng I (L2)", "23/06", "04:00", "Pháp", "Iraq", "VTV3", "Chưa cập nhật"],
-        ["WC-43", "Bảng I (L2)", "23/06", "07:00", "Na Uy", "Senegal", "VTV3", "Chưa cập nhật"],
-        ["WC-44", "Bảng J (L2)", "23/06", "10:00", "Jordan", "Algeria", "VTV3", "Chưa cập nhật"],
-        ["WC-45", "Bảng K (L2)", "24/06", "00:00", "Bồ Đào Nha", "Uzbekistan", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-46", "Bảng L (L2)", "24/06", "03:00", "Anh", "Ghana", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-47", "Bảng L (L2)", "24/06", "06:00", "Panama", "Croatia", "VTV3", "Chưa cập nhật"],
-        ["WC-48", "Bảng K (L2)", "24/06", "09:00", "Colombia", "CHDC Congo", "VTV3", "Chưa cập nhật"],
-        # Lượt 3 Vòng Bảng
-        ["WC-49", "Bảng B (L3)", "25/06", "02:00", "Thụy Sĩ", "Canada", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-50", "Bảng B (L3)", "25/06", "02:00", "Bosnia & Herzegovina", "Qatar", "VTV2", "Chưa cập nhật"],
-        ["WC-51", "Bảng C (L3)", "25/06", "05:00", "Scotland", "Brazil", "VTV3", "Chưa cập nhật"],
-        ["WC-52", "Bảng C (L3)", "25/06", "05:00", "Morocco", "Haiti", "VTV2", "Chưa cập nhật"],
-        ["WC-53", "Bảng A (L3)", "25/06", "08:00", "CH Séc", "Mexico", "VTV3", "Chưa cập nhật"],
-        ["WC-54", "Bảng A (L3)", "25/06", "08:00", "Nam Phi", "Hàn Quốc", "VTV2", "Chưa cập nhật"],
-        ["WC-55", "Bảng E (L3)", "26/06", "03:00", "Curaçao", "Bờ Biển Ngà", "VTV2", "Chưa cập nhật"],
-        ["WC-56", "Bảng E (L3)", "26/06", "03:00", "Ecuador", "Đức", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-57", "Bảng F (L3)", "26/06", "06:00", "Nhật Bản", "Thụy Điển", "VTV2", "Chưa cập nhật"],
-        ["WC-58", "Bảng F (L3)", "26/06", "06:00", "Tunisia", "Hà Lan", "VTV3", "Chưa cập nhật"],
-        ["WC-59", "Bảng D (L3)", "26/06", "09:00", "Thổ Nhĩ Kỳ", "Mỹ", "VTV3", "Chưa cập nhật"],
-        ["WC-60", "Bảng D (L3)", "26/06", "09:00", "Paraguay", "Australia", "VTV2", "Chưa cập nhật"],
-        ["WC-61", "Bảng I (L3)", "27/06", "02:00", "Na Uy", "Pháp", "VTV3, VTV10", "Chưa cập nhật"],
-        ["WC-62", "Bảng I (L3)", "27/06", "02:00", "Senegal", "Iraq", "VTV2", "Chưa cập nhật"],
-        ["WC-63", "Bảng H (L3)", "27/06", "07:00", "Cape Verde", "Saudi Arabia", "VTV2", "Chưa cập nhật"],
-        ["WC-64", "Bảng H (L3)", "27/06", "07:00", "Uruguay", "Tây Ban Nha", "VTV3", "Chưa cập nhật"],
-        ["WC-65", "Bảng G (L3)", "27/06", "10:00", "Ai Cập", "Iran", "VTV2", "Chưa cập nhật"],
-        ["WC-66", "Bảng G (L3)", "27/06", "10:00", "New Zealand", "Bỉ", "VTV3", "Chưa cập nhật"],
-        ["WC-67", "Bảng L (L3)", "28/06", "04:00", "Panama", "Anh", "VTV2", "Chưa cập nhật"],
-        ["WC-68", "Bảng L (L3)", "28/06", "04:00", "Croatia", "Ghana", "VTV3", "Chưa cập nhật"],
-        ["WC-69", "Bảng K (L3)", "28/06", "06:30", "Colombia", "Bồ Đào Nha", "VTV7", "Chưa cập nhật"],
-        ["WC-70", "Bảng K (L3)", "28/06", "06:30", "CHDC Congo", "Uzbekistan", "VTV10", "Chưa cập nhật"],
-        ["WC-71", "Bảng J (L3)", "28/06", "09:00", "Algeria", "Áo", "VTV2", "Chưa cập nhật"],
-        ["WC-72", "Bảng J (L3)", "28/06", "09:00", "Jordan", "Argentina", "VTV3", "Chưa cập nhật"],
-        # Vòng Loại Trực Tiếp (Knockout 32 Đội)
-        ["WC-32-01", "Vòng 32 đội", "29/06", "02:00", "Nhì bảng A", "Nhì bảng B", "VTV3, VTV10", "Mô phỏng"],
-        ["WC-32-02", "Vòng 32 đội", "30/06", "00:00", "Nhất bảng C", "Nhì bảng F", "VTV3, VTV10", "Mô phỏng"],
-        ["WC-32-03", "Vòng 32 đội", "30/06", "03:30", "Nhất bảng E", "Hạng 3 A/B/C/D", "VTV3, VTV10", "Mô phỏng"],
-        ["WC-32-04", "Vòng 32 đội", "30/06", "08:00", "Nhất bảng F", "Nhì bảng C", "VTV3", "Mô phỏng"],
-        ["WC-32-05", "Vòng 32 đội", "01/07", "00:00", "Nhì bảng E", "Nhì bảng I", "VTV3, VTV10", "Mô phỏng"],
-        ["WC-32-06", "Vòng 32 đội", "01/07", "04:00", "Nhất bảng I", "Hạng 3 C/D/F", "VTV3, VTV10", "Mô phỏng"],
-        ["WC-32-07", "Vòng 32 đội", "01/07", "08:00", "Nhất bảng A", "Hạng 3 C/E/F", "VTV3", "Mô phỏng"],
-        ["WC-32-08", "Vòng 32 đội", "01/07", "23:00", "Nhất bảng L", "Hạng 3 E/H/I", "VTV3, VTV10", "Mô phỏng"],
-        ["WC-32-09", "Vòng 32 đội", "02/07", "03:00", "Nhất bảng G", "Hạng 3 A/E/H", "VTV3, VTV10", "Mô phỏng"],
-        ["WC-32-10", "Vòng 32 đội", "02/07", "07:00", "Nhất bảng D", "Hạng 3 B/E/F", "VTV3", "Mô phỏng"],
-        ["WC-32-11", "Vòng 32 đội", "03/07", "02:00", "Nhất bảng H", "Nhì bảng J", "VTV3, VTV10", "Mô phỏng"],
-        ["WC-32-12", "Vòng 32 đội", "03/07", "06:00", "Nhì bảng K", "Nhì bảng L", "VTV3", "Mô phỏng"],
-        ["WC-32-13", "Vòng 32 đội", "03/07", "10:00", "Nhất bảng B", "Hạng 3 E/F/G", "VTV3", "Mô phỏng"],
-        ["WC-32-14", "Vòng 32 đội", "04/07", "01:00", "Nhì bảng D", "Nhì bảng G", "VTV3, VTV10", "Mô phỏng"],
-        ["WC-32-15", "Vòng 32 đội", "04/07", "05:00", "Nhất bảng J", "Nhì bảng H", "VTV3", "Mô phỏng"],
-        ["WC-32-16", "Vòng 32 đội", "04/07", "08:30", "Nhất bảng K", "Hạng 3 D/E/I", "VTV3", "Mô phỏng"],
-        # Vòng 16 Đội & Chung Kết
-        ["WC-R16", "Vòng 1/8", "05/07", "04:00", "Thắng trận 74", "Thắng trận 76", "VTV3, VTV10", "Vòng 16 đội"],
-        ["WC-QF", "Vòng Tứ Kết", "11/07", "02:00", "Thắng trận 94", "Thắng trận 95", "VTV3, VTV10", "Tứ Kết"],
-        ["WC-SF", "Vòng Bán Kết", "15/07", "02:00", "Thắng trận 102", "Thắng trận 103", "VTV3, VTV10", "Bán Kết"],
-        ["WC-BM", "Tranh Hạng Ba", "19/07", "04:00", "Thua trận 102", "Thua trận 103", "VTV3, VTV10", "Hạng Ba"],
-        ["WC-FN", "Trận Chung Kết", "20/07", "02:00", "Thắng trận 102", "Thắng trận 103", "VTV3, VTV10", "Chung Kết Dream Trận"]
-    ]
-    matches_db = {}
-    for m in raw_schedule:
-        matches_db[m[0]] = {
-            "vòng": m[1], "ngày": m[2], "giờ": m[3], "đội_nhà": m[4], "đội_khách": m[5], "kênh": m[6],
-            "trọng_tài": "Chưa cập nhật", "thời_tiết": m[7], "dự_đoán_bạn": "", "ti_so_ht": "", "ti_so_ft": "",
-            "sút_ht": "", "sút_ft": "", "chuyền_ft": "", "góc_ft": "", "thẻ_vàng": "", "thẻ_đỏ": ""
-        }
-    st.session_state.matches = matches_db
-
-# KHAI BÁO CÁC HÀM LOGIC CHIẾN THUẬT ĐỂ ĐẢM BẢO KHÔNG BỊ LỖI NAMERROR
+# KHAI BÁO THUẬT TOÁN LOGIC TRƯỚC KHI GỌI Ở GIAO DIỆN ĐỂ TRÁNH LỖI NAMERROR 100%
 def get_team_history_insight(team_name):
     played_matches = []
     for code, m in st.session_state.matches.items():
@@ -364,7 +243,7 @@ def ai_generate_editorial(match_id, home, away):
 tab1, tab2, tab3, tab4 = st.tabs([
     "📰 Nhận Định Trước Trận & Đội Hình", 
     "⏱️ Phòng Nhập Liệu Real-Time (HT/FT)", 
-    "🏃 Danh Sách 48 Đội Bóng Đầy Đủ",
+    "🏃 Danh Sách Các Đội Bóng",
     "📊 Xác Suất Vô Địch Qua Từng Vòng (Goal Analytics)"
 ])
 
@@ -489,7 +368,7 @@ with tab2:
         st.toast("Hệ thống đã lưu kết quả trận đấu lên máy chủ đám mây vĩnh viễn!", icon="⚡")
 
 # ==================================================================
-# TAB 3: DANH SÁCH TOÀN BỘ 48 ĐỘI BÓNG KHÔNG LỖI KHÓA KEYERROR
+# TAB 3: DANH SÁCH TOÀN BỘ CÁC ĐỘI BÓNG KHÔNG LỖI KHÓA KEYERROR
 # ==================================================================
 with tab3:
     st.markdown('<div class="sub-title-custom">CƠ SỞ DỮ LIỆU CHIẾN THUẬT TOÀN GIẢI ĐẤU (ĐẦY ĐỦ 48 ĐỘI)</div>', unsafe_allow_html=True)
@@ -507,7 +386,7 @@ with tab3:
     st.dataframe(team_df, use_container_width=True, height=450)
 
 # ==================================================================
-# TAB 4: THAY THẾ TOÀN DIỆN BẰNG % CƠ HỘI VÔ ĐỊCH DỰ KIẾN QUA TỪNG VÒNG
+# TAB 4: THAY THẾ TOÀN DIỆN BẰNG % CƠ HỘI VÔ ĐỊCH 2026 CHUẨN XỊN LỊCH SỬ
 # ==================================================================
 with tab4:
     st.markdown('<div class="sub-title-custom">🏆 XÁC SUẤT CƠ HỘI VÔ ĐỊCH DỰ KIẾN (CHAMPIONSHIP ODDS EVOLUTION)</div>', unsafe_allow_html=True)
@@ -527,8 +406,8 @@ with tab4:
     if round_choice == "Sau Vòng Bảng (Còn 32 Đội Tuyển)":
         c1, c2 = st.columns(2)
         with c1:
-            st.markdown('<div class="card-player"><span class="stat-label">🇦🇷 Argentina</span><span class="stat-value">25%</span></div>', unsafe_allow_html=True)
-            st.markdown('<div class="card-player"><span class="stat-label">🇫🇷 Pháp</span><span class="stat-value">20%</span></div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-player"><span class="stat-label">🇦🇷 Argentina (Đương kim Vô địch)</span><span class="stat-value">25%</span></div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-player"><span class="stat-label">🇫🇷 Pháp (Thách thức lớn)</span><span class="stat-value">20%</span></div>', unsafe_allow_html=True)
             st.markdown('<div class="card-player"><span class="stat-label">🇧🇷 Brazil</span><span class="stat-value">16%</span></div>', unsafe_allow_html=True)
             st.markdown('<div class="card-player"><span class="stat-label">🇪🇸 Tây Ban Nha</span><span class="stat-value">12%</span></div>', unsafe_allow_html=True)
         with c2:
@@ -540,7 +419,7 @@ with tab4:
     elif round_choice == "Sau Vòng 32 Đội (Còn 16 Đội Tuyển)":
         c1, c2 = st.columns(2)
         with c1:
-            st.markdown('<div class="card-player"><span class="stat-label">🇦🇷 Argentina</span><span class="stat-value">28%</span></div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-player"><span class="stat-label">🇦🇷 Argentina (Đương kim Vô địch)</span><span class="stat-value">28%</span></div>', unsafe_allow_html=True)
             st.markdown('<div class="card-player"><span class="stat-label">🇫🇷 Pháp</span><span class="stat-value">22%</span></div>', unsafe_allow_html=True)
             st.markdown('<div class="card-player"><span class="stat-label">🇧🇷 Brazil</span><span class="stat-value">19%</span></div>', unsafe_allow_html=True)
             st.markdown('<div class="card-player"><span class="stat-label">🇪🇸 Tây Ban Nha</span><span class="stat-value">14%</span></div>', unsafe_allow_html=True)
@@ -552,7 +431,7 @@ with tab4:
     elif round_choice == "Sau Vòng 16 Đội (Còn 8 Đội Tuyển)":
         c1, c2 = st.columns(2)
         with c1:
-            st.markdown('<div class="card-player"><span class="stat-label">🇦🇷 Argentina</span><span class="stat-value">34%</span></div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-player"><span class="stat-label">🇦🇷 Argentina (Đương kim Vô địch)</span><span class="stat-value">34%</span></div>', unsafe_allow_html=True)
             st.markdown('<div class="card-player"><span class="stat-label">🇫🇷 Pháp</span><span class="stat-value">26%</span></div>', unsafe_allow_html=True)
         with c2:
             st.markdown('<div class="card-player"><span class="stat-label">🇧🇷 Brazil</span><span class="stat-value">22%</span></div>', unsafe_allow_html=True)
@@ -561,16 +440,16 @@ with tab4:
     elif round_choice == "Sau Vòng Tứ Kết (Còn 4 Đội Tuyển)":
         c1, c2 = st.columns(2)
         with c1:
-            st.markdown('<div class="card-player"><span class="stat-label">🇦🇷 Argentina</span><span class="stat-value">42%</span></div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-player"><span class="stat-label">🇦🇷 Argentina (Đương kim Vô địch)</span><span class="stat-value">42%</span></div>', unsafe_allow_html=True)
             st.markdown('<div class="card-player"><span class="stat-label">🇫🇷 Pháp</span><span class="stat-value">35%</span></div>', unsafe_allow_html=True)
         with c2:
             st.markdown('<div class="card-player"><span class="stat-label">🇧🇷 Brazil</span><span class="stat-value">15%</span></div>', unsafe_allow_html=True)
             st.markdown('<div class="card-player"><span class="stat-label">🇪🇸 Tây Ban Nha</span><span class="stat-value">8%</span></div>', unsafe_allow_html=True)
             
     elif round_choice == "Sau Vòng Bán Kết (Trận Chung Kết Trong Mơ)":
-        st.markdown('<div class="card-vs" style="padding:15px; margin-bottom:15px;"><span style="color:#ffd700; font-weight:bold; font-size:20px;">TRẬN CHUNG KẾT TRONG MƠ CHÍNH THỨC</span><br>🇦🇷 Argentina vs 🇫🇷 Pháp</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-vs" style="padding:15px; margin-bottom:15px;"><span style="color:#ffd700; font-weight:bold; font-size:20px;">TRẬN CHUNG KẾT TRONG MƠ CHÍNH THỨC 2026</span><br>🇦🇷 Argentina vs 🇫🇷 Pháp</div>', unsafe_allow_html=True)
         col_f1, col_f2 = st.columns(2)
         with col_f1:
-            st.markdown('<div class="card-player" style="border-left: 5px solid #ffd700;"><span class="stat-label">👑 ARGENTINA NÂNG CÚP</span><span class="stat-value">58%</span></div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-player" style="border-left: 5px solid #ffd700;"><span class="stat-label">👑 ARGENTINA BẢO VỆ NGÔI VƯƠNG (ĐKVĐ 2022)</span><span class="stat-value">58%</span></div>', unsafe_allow_html=True)
         with col_f2:
-            st.markdown('<div class="card-player" style="border-left: 5px solid #64748b;"><span class="stat-label">🐓 PHÁP BẢO VỆ NGÔI VƯƠNG</span><span class="stat-value">42%</span></div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-player" style="border-left: 5px solid #3b82f6;"><span class="stat-label">🐓 PHÁP LẬT ĐỔ ĐÒI NỢ THÀNH CÔNG</span><span class="stat-value">42%</span></div>', unsafe_allow_html=True)
